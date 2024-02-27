@@ -40,3 +40,6 @@ nb-configuration.xml
 *.war
 *.ear
 /SimpleScannerExample/nbproject/private/
+/whoAreYou/nbproject/private/
+/questColor/nbproject/private/
+/sumTwoNumbersGiven/nbproject/private/
