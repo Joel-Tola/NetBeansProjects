@@ -4,6 +4,8 @@
  */
 package questcolor;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.MessageFormat;
 import java.util.Scanner;
 
@@ -23,10 +25,23 @@ public class QuestColor {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        String myQuest;
+        String myColor;
+
+        System.out.println("Read line using Scanner");
         System.out.println("What is your quest?");
         System.out.println("What is your favorite color?");
-        String myQuest = readLine();
-        String myColor = readLine();
+        myQuest = readLine();
+        myColor = readLine();
+        System.out.println(MessageFormat.format("Ah, I see your quest is to {0}, and your favorite color is {1}", myQuest, myColor));
+    
+        System.out.println("--------------------------------");
+
+        System.out.println("Read line using Buffer Reader");
+        System.out.println("What is your quest?");
+        System.out.println("What is your favorite color?");
+        myQuest = readLineByBufferReader();
+        myColor = readLineByBufferReader();
         System.out.println(MessageFormat.format("Ah, I see your quest is to {0}, and your favorite color is {1}", myQuest, myColor));
     }
 
@@ -37,5 +52,15 @@ public class QuestColor {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    private static String readLineByBufferReader() {
+        BufferedReader bufferReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            return bufferReader.readLine();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return "";
     }
 }

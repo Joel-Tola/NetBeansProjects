@@ -25,8 +25,15 @@ public class WhoAreYou {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        System.out.println("Read line using Scanner");
         System.out.println("Who are you?");
         System.out.println(MessageFormat.format("Oh, that is a very nice name, {0}", readLine()));
+
+        System.out.println("--------------------------------");
+
+        System.out.println("Read line using Buffer Reader");
+        System.out.println("Who are you?");
+        System.out.println(MessageFormat.format("Oh, that is a very nice name, {0}", readLineByBufferReader()));
 
     }
 
@@ -36,28 +43,16 @@ public class WhoAreYou {
             return scanner.nextLine();
         } catch (Exception e) {
             throw e;
-        } finally {
-            scanner.close();
         }
     }
 
-    private static String readLineByBufferReader() throws Exception {
+    private static String readLineByBufferReader() {
         BufferedReader bufferReader = new BufferedReader(new InputStreamReader(System.in));
         try {
             return bufferReader.readLine();
         } catch (Exception e) {
-            throw e;
+            System.err.println(e.getMessage());
         }
-    }
-
-    private static int readNumberByBufferReader() {
-        BufferedReader bufferReader = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            return Integer.parseInt(bufferReader.readLine());
-        } catch (Exception e) {
-            System.out.println("Please insert a valid number");
-            readNumberByBufferReader();
-        }
-        return 0;
+        return "";
     }
 }

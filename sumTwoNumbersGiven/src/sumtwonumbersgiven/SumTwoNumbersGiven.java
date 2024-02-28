@@ -4,6 +4,8 @@
  */
 package sumtwonumbersgiven;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.MessageFormat;
 import java.util.Scanner;
 
@@ -20,11 +22,25 @@ public class SumTwoNumbersGiven {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        int num1;
+        int num2;
+
+        System.out.println("Read line using Scanner");
         System.out.println("To sum two numbers please");
         System.out.println("Insert the first number");
-        int num1 = readNumber();
+        num1 = readNumber();
         System.out.println("Insert the second number");
-        int num2 = readNumber();
+        num2 = readNumber();
+        System.out.println(MessageFormat.format("The sum of {0} and {1} is {2}", num1, num2, num1 + num2));
+
+        System.out.println("--------------------------------");
+
+        System.out.println("Read line using Buffer Reader");
+        System.out.println("To sum two numbers please");
+        System.out.println("Insert the first number");
+        num1 = readNumberByBufferReader();
+        System.out.println("Insert the second number");
+        num2 = readNumberByBufferReader();
         System.out.println(MessageFormat.format("The sum of {0} and {1} is {2}", num1, num2, num1 + num2));
     }
 
@@ -37,6 +53,17 @@ public class SumTwoNumbersGiven {
         } catch (Exception e) {
             System.out.println("Please insert a valid number");
             return readNumber();
+        }
+    }
+
+    
+    private static int readNumberByBufferReader() {
+        BufferedReader bufferReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            return Integer.parseInt(bufferReader.readLine());
+        } catch (Exception e) {
+            System.out.println("Please insert a valid number");
+            return readNumberByBufferReader();
         }
     }
 }
