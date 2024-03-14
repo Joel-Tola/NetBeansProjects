@@ -34,7 +34,7 @@ public class SumTwoNumbersGiven {
         System.out.println(MessageFormat.format("The sum of {0} and {1} is {2}", num1, num2, num1 + num2));
 
         System.out.println("--------------------------------");
-
+        String word = "";
         System.out.println("Read line using Buffer Reader");
         System.out.println("To sum two numbers please");
         System.out.println("Insert the first number");
