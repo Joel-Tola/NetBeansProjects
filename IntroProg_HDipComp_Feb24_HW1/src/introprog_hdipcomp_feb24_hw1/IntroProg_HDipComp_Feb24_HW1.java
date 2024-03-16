@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author Joel Tola
+ * @author me
  *         Program that will ask the user to enter the marks
  *         they have received for an assignment that is worth 25% of the marks
  *         for the module.
@@ -34,44 +34,43 @@ public class IntroProg_HDipComp_Feb24_HW1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in); // Scanner object to read input.
         int mark; // Variable to store the input mark.
         double markPercentage; // Variable to store the percentage equivalent of the mark.
         DecimalFormat decFor = new DecimalFormat("0.00"); // Decimal formatter to format percentage.
-        boolean isValidMark = false; // Flag to track if the mark entered is valid.
 
-        // Loop until a valid mark is entered.
-        while (!isValidMark) {
-            System.out.println("Please enter your mark"); // Prompt the user to enter their mark.
-            mark = readNumber(); // Read the mark input from the user.
+        mark = ReadValidMark(scanner); //Read next Integer input.
 
-            // Check if the entered mark is within the valid range.
-            if (mark > 0 && mark <= 100) {
-                isValidMark = true; // Mark is valid.
-                markPercentage = ((double) mark / 100) * 25; // Calculate the percentage equivalent.
-                // Format the output message with the percentage score.
-                String message = MessageFormat.format("You scored {0}% out of a maximum of 25%",
-                        decFor.format(markPercentage));
-                System.out.println(message); // Display the result.
-            } else {
-                System.out.println("Please enter a number between 0 and 100"); // Invalid mark entered.
-            }
-        }
+        markPercentage = ((double) mark / 100) * 25; // Calculate the percentage equivalent.
+        // Format the output message with the percentage score.
+        String message = MessageFormat.format("You scored {0}% out of a maximum of 25%",
+                decFor.format(markPercentage));
+        System.out.println(message); // Display the result.
+        scanner.close(); // Closes this scanner to prevent Resource leak.
     }
 
     /**
-     * Method to read an integer input from the user.
+     * Method to read an integer valid mark from the user.
      * 
      * @return the integer input read from the user
      */
-    private static int readNumber() {
-        Scanner scanner = new Scanner(System.in); // Scanner object to read input.
-        int number; // Variable to store the input number.
-        try {
-            number = scanner.nextInt(); // Attempt to read an integer input.
-            return number; // Return the input number.
-        } catch (Exception e) {
-            System.out.println("Please insert a valid number"); // Input is not a valid integer.
-            return readNumber(); // Recursive call to read a valid number.
+    private static int ReadValidMark(Scanner scanner) {
+        boolean isValidMark = false; // Flag to track if the mark entered is valid.
+        int number = 0; //Initialize number by default.
+        // Loop until a valid mark is entered.
+        while (!isValidMark) {
+            System.out.println("Please enter your mark"); // Prompt the user to enter their mark.
+            if (scanner.hasNextInt()) { //Returns true if the next token in this scanner's input can be interpreted as an int value
+            number = scanner.nextInt(); // Read the mark input from the user.
+                // Check if the entered mark is within the valid range.
+                if (number > 0 && number <= 100) {
+                    isValidMark = true; // Mark is valid.
+                } else {
+                    System.out.println("Please enter a number between 0 and 100"); // Invalid mark entered.
+                }
+            }
         }
+
+        return number;
     }
 }
