@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author me
+ * @author Joel Tola Soliz
  *         Program that will ask the user to enter the marks
  *         they have received for an assignment that is worth 25% of the marks
  *         for the module.
@@ -39,7 +39,7 @@ public class IntroProg_HDipComp_Feb24_HW1 {
         double markPercentage; // Variable to store the percentage equivalent of the mark.
         DecimalFormat decFor = new DecimalFormat("0.00"); // Decimal formatter to format percentage.
 
-        mark = ReadValidMark(scanner); //Read next Integer input.
+        mark = ReadValidMark(scanner); // Read next Integer input.
 
         markPercentage = ((double) mark / 100) * 25; // Calculate the percentage equivalent.
         // Format the output message with the percentage score.
@@ -50,27 +50,30 @@ public class IntroProg_HDipComp_Feb24_HW1 {
     }
 
     /**
-     * Method to read an integer valid mark from the user.
+     * Method to read a valid integer mark from the user.
      * 
+     * @param scanner the Scanner object used for input
      * @return the integer input read from the user
      */
     private static int ReadValidMark(Scanner scanner) {
         boolean isValidMark = false; // Flag to track if the mark entered is valid.
-        int number = 0; //Initialize number by default.
+        int number = 0; // Initialize number by default.
         // Loop until a valid mark is entered.
         while (!isValidMark) {
-            System.out.println("Please enter your mark"); // Prompt the user to enter their mark.
-            if (scanner.hasNextInt()) { //Returns true if the next token in this scanner's input can be interpreted as an int value
-            number = scanner.nextInt(); // Read the mark input from the user.
+            System.out.println("Enter your mark"); // Prompt the user to enter their mark.
+            if (scanner.hasNextInt()) { // Returns true if the next token in this scanner's input can be interpreted as an int value.
+                number = scanner.nextInt(); // Read the mark input from the user.
                 // Check if the entered mark is within the valid range.
-                if (number > 0 && number <= 100) {
+                if (number >= 0 && number <= 100) {
                     isValidMark = true; // Mark is valid.
                 } else {
                     System.out.println("Please enter a number between 0 and 100"); // Invalid mark entered.
                 }
+            } else {
+                System.out.println("Please enter a valid number"); // Display error message for non-integer input.
+                scanner.next(); // Consume the invalid input to avoid infinite loop.
             }
         }
-
         return number;
     }
 }
