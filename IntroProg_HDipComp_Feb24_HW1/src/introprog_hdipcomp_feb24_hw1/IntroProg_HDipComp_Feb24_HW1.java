@@ -38,13 +38,12 @@ public class IntroProg_HDipComp_Feb24_HW1 {
         int mark; // Variable to store the input mark.
         double markPercentage; // Variable to store the percentage equivalent of the mark.
         DecimalFormat decFor = new DecimalFormat("0.00"); // Decimal formatter to format percentage.
-
+        
         mark = ReadValidMark(scanner); // Read next Integer input.
-
         markPercentage = ((double) mark / 100) * 25; // Calculate the percentage equivalent.
         // Format the output message with the percentage score.
-        String message = MessageFormat.format("You scored {0}% out of a maximum of 25%",
-                decFor.format(markPercentage));
+        String message = MessageFormat.format("You scored {0}% out of a maximum of 25%", // Create message using interpolation.
+                decFor.format(markPercentage)); // Format markPercentage to two decimals.
         System.out.println(message); // Display the result.
         scanner.close(); // Closes this scanner to prevent Resource leak.
     }
