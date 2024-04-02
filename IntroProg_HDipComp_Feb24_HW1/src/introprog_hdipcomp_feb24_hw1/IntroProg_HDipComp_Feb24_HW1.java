@@ -6,8 +6,6 @@ package introprog_hdipcomp_feb24_hw1;
 
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**

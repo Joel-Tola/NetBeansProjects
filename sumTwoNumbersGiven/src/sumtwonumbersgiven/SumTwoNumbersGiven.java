@@ -56,7 +56,10 @@ public class SumTwoNumbersGiven {
         }
     }
 
-    
+    /**
+     * 
+     * @return
+     */
     private static int readNumberByBufferReader() {
         BufferedReader bufferReader = new BufferedReader(new InputStreamReader(System.in));
         try {
