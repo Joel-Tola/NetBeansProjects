@@ -22,11 +22,17 @@ public class SimpleScopeExample {
         int userInput = handler.askUserForInt("Enter any integer:");
         System.out.println("You entered: " + userInput);
 
-        userInput = handler.askUserForInt("Enter an integer bigger than 5:", 5);
-        System.out.println("You entered: " + userInput);
+        int userInput2 = handler.askUserForIntV2("Enter any integer:");
+        System.out.println("You entered: " + userInput2);
 
-        userInput = handler.askUserForInt("Enter an integer between 10 and 20:", 10, 20);
-        System.out.println("You entered: " + userInput);
+        int userInput3 = handler.askUserForIntV3("Enter any integer:");
+        System.out.println("You entered: " + userInput3);
+
+        // userInput = handler.askUserForInt("Enter an integer bigger than 5:", 5);
+        // System.out.println("You entered: " + userInput);
+
+        // userInput = handler.askUserForInt("Enter an integer between 10 and 20:", 10, 20);
+        // System.out.println("You entered: " + userInput);
 
     }
     
