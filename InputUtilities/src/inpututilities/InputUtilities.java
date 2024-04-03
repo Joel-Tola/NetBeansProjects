@@ -18,8 +18,8 @@ public class InputUtilities {
     private final Scanner myScanner = new Scanner(System.in);
 
     /**
-     * Ask user to enter some text - if they enter non-text (like numbers)
-     * then ask them again
+     * Ask user to enter some text
+     *if they enter non-text (like numbers) then ask them again.
      * 
      * @param prompt - the question or prompt to ask the user
      * @return a String containing whatever text the user entered
@@ -40,7 +40,7 @@ public class InputUtilities {
 
     /**
      * Ask the user to enter any integer value (negatives are allowed)
-     * if they do not enter an integer ask them again
+     * if they do not enter an integer ask them again.
      * 
      * @param prompt the question or prompt to ask the user
      * @return a valid int entered by the user
@@ -56,6 +56,7 @@ public class InputUtilities {
         } while (!userInput.matches("[0-9-]+"));
         // user has entered a numeric value but it is still a String
 
+        // returning the parsed userInput string to int.
         return Integer.parseInt(userInput);
     }
 
@@ -112,10 +113,9 @@ public class InputUtilities {
         // input must be valid
         return userInput;
     }
-
     /**
      * Ask user for an integer value bigger than a given minimum
-     * if they do not enter a valid integer ask them again
+     * if they do not enter a valid integer ask them again.
      * 
      * @param prompt   the question or prompt to ask user
      * @param minValue the lowest value allowed
