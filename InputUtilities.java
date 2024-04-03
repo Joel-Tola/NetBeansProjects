@@ -8,9 +8,12 @@ import java.util.Scanner;
 
 /**
  * HDIP Comp Feb 2024 cohort
- * @author Joel
+ * @author kheal
  */
 public class InputUtilities {
+
+    
+    
     /**
      * Ask user to enter some  text - if they enter non-text (like numbers)
      * then ask them again

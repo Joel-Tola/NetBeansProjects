@@ -19,15 +19,16 @@ public class BinaryConvertor {
      */
     public static void main(String[] args) {
         String stringBinNumber;
+        int binNumber;
         System.out.println("Binary convertor");
         System.out.println("Please enter a number");
         int decNumber = readNumber();
 
-        // stringBinNumber = convertDecToBinary(decNumber);
-        // System.out.println(MessageFormat.format("The number {0} in Binary is {1}", decNumber, stringBinNumber));
+        stringBinNumber = convertDecToBinary(decNumber);
+        System.out.println(MessageFormat.format("The number {0} in Binary is {1}", decNumber, stringBinNumber));
 
-        System.out.println(MessageFormat.format("The number {0} in Binary is: ", decNumber));
-        decimalToBinary(decNumber);
+        // binNumber = decimalToBinary(decNumber);
+        // System.out.println(MessageFormat.format("The number {0} in Binary is: {1}", decNumber, Integer.toString(binNumber)));
 
 
     }

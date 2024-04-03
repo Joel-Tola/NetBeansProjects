@@ -18,15 +18,15 @@ public class SimpleScopeExample {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        InputUtilities myInput = new InputUtilities();
+        InputUtilities handler = new InputUtilities();
+        int userInput = handler.askUserForInt("Enter any integer:");
+        System.out.println("You entered: " + userInput);
 
-        String userName = myInput.askUserForTex("What is your name?");
+        userInput = handler.askUserForInt("Enter an integer bigger than 5:", 5);
+        System.out.println("You entered: " + userInput);
 
-        System.out.println("Hello " + userName);
-
-        int userAge = myInput.askUserForInt("What is your age");
-
-        System.out.println("You do not look as old " + userName);
+        userInput = handler.askUserForInt("Enter an integer between 10 and 20:", 10, 20);
+        System.out.println("You entered: " + userInput);
 
     }
     

@@ -19,6 +19,8 @@ public class SimpleScannerExample {
     public static void main(String[] args) {
         // TODO code application logic here
         Scanner myScanner = new Scanner(System.in);
+        String ans = "";
+        int num;
 
         // String EXPECTED_STRING = "String Interpolation in Java with some Java examples.";
         // String first = "Interpolation";
@@ -26,11 +28,27 @@ public class SimpleScannerExample {
         // String result = String.format("String %s in %s with some %s examples.", first, second, second);
 
         try {
-            System.out.println("Insert your name");
-            String myName = readLine();
-            System.out.println("What is your age?");
-            int myAge = readNumber();
-            System.out.println(MessageFormat.format("Your Name is {0}, your Age is {1}", myName, myAge));
+            // System.out.println("Insert your name");
+            // String myName = readLine();
+            // System.out.println("What is your age?");
+            // int myAge = readNumber();
+            // System.out.println(MessageFormat.format("Your Name is {0}, your Age is {1}", myName, myAge));
+
+            System.out.println("Insert a number please");
+            num = readNumber();
+
+            
+            while (num > 0) {
+                if (num % 2 == 0) {
+                    ans = "0" + ans;
+                } else {
+                    ans = "1" + ans;
+                }
+    
+                num = num / 2;
+            }
+            System.out.println(ans);
+
         } catch (Exception e) {
             throw e;
         }
