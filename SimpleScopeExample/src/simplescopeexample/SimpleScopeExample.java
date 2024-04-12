@@ -4,6 +4,8 @@
  */
 package simplescopeexample;
 
+import java.util.ArrayList;
+
 import inpututilities.InputUtilities;
 
 /**
@@ -35,6 +37,16 @@ public class SimpleScopeExample {
         userInput = handler.askUserForInt("Enter an integer between 10 and 20:", 10, 20);
         System.out.println("You entered: " + userInput);
 
+        ArrayList<String> fruits = new ArrayList<>();
+        fruits.add("Apple");
+        fruits.add("Banana");
+        fruits.add("Orange");
+
+        // Enhanced for loop to iterate over the elements of the ArrayList
+        for (String fruit : fruits) {
+            System.out.println(fruit);
+        }
+        
+        
     }
-    
 }

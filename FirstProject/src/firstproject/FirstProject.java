@@ -6,6 +6,9 @@ package firstproject;
 
 import java.lang.Object;
 import java.math.BigDecimal;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.Number;
 
 /**
@@ -18,59 +21,46 @@ public class FirstProject {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        // System.out.println("Hello");
-        // int a = 10;
-        // int b = 20;
+        String path = "C:/Users/sljoe/Documents/NetBeansProjects/FirstProject/src/firstproject/Weather Data.csv"; // Replace with your file path
+        String line = "";
+        
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(path));
 
-        // System.out.println("Before swapping, a = " + a + " and b = " + b);
+            line = br.readLine();
+            String[] columns = line.split(",");
+            String column1 = columns[0];
+            String column2 = columns[1];
+            String column3 = columns[2];
+            int totalTemperatures = 0;
+            int counter = 0;
+            int avTemperatures;
+            
+            while ((line = br.readLine()) != null) {
+                // Use comma as separator
+                String[] values = line.split(",");
+                int temp = Integer.parseInt(values[1]);
+                totalTemperatures =+ temp;
+                counter++;
 
-        // // Swapping a and b using XOR
-        // a = a ^ b;
-        // System.out.println("swapping, a = " + a + " ^ " + b);
-        // b = a ^ b;
-        // System.out.println("swapping, a = " + a + " ^ " + b);
-        // a = a ^ b;
+                System.out.print(column1 + " " + values[0] + ", " + column2 + " " + values[1] + ", " + column3  + " " + values[2]);
+                
+                // // Print out the parsed values
+                // for(String value : values) {
+                //     System.out.print(value + " ");
+                // }
+                System.out.println(); // Print a newline after each row
+            }
+            
+            br.close();
 
-        // System.out.println("After swapping, a = " + a + " and b = " + b);
+            avTemperatures = totalTemperatures / counter;
 
-        // float test = 12.3f;
-
-        String string = "test";
-
-        String test1 = "avocado";
-
-        String test2 = test1.substring(5, 1);
-
-        System.out.println(test2);
-
-        System.out.println("Try programiz.pro");
-
-        String myName = "Edmund";
-
-        myName.substring(0, 0);
-
-
-
-        if (myName.length() < 5) {
-            System.out.println("Too short");
-
+            System.out.print("Average temps: " + avTemperatures);
+            
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        else if (myName.length() >= 5 && !(myName.contains("e"))) {
-            System.out.println("Spot on!");
-
-        }
-
-        else if (myName.endsWith("d") && (myName.contains("x"))) {
-            System.out.println("That's right!");
-        }
-
-        else {
-
-            System.out.println("Good answer!");
-        }
-
     }
 
 }
