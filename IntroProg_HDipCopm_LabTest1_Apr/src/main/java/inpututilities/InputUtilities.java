@@ -7,94 +7,65 @@ package inpututilities;
 import java.util.Scanner;
 
 /**
- * HDIP Comp Feb 2024
- * Utility class for handling input from users in various formats.
- * Ensures that inputs meet specific criteria before accepting them.
+ * HDIP Comp Feb 2024 cohort
  * 
- * @author Joel
+ * @author Joel Tola Soliz
  */
 public class InputUtilities {
-    // Single Scanner instance for reuse across all methods
-    private final Scanner myScanner = new Scanner(System.in);
 
     /**
-     * Ask user to enter some text
-     *if they enter non-text (like numbers) then ask them again.
+     * Ask user to enter some text - if they enter non-text (like numbers)
+     * then ask them again
      * 
      * @param prompt - the question or prompt to ask the user
      * @return a String containing whatever text the user entered
      */
     public String askUserForText(String prompt) {
+        Scanner myKB = new Scanner(System.in);
         String userInput;
 
         do {
             System.out.println(prompt);
             System.out.println("Enter text only please - no numbers!");
-            userInput = myScanner.nextLine();
+            userInput = myKB.nextLine();
 
         } while (!userInput.matches("[a-zA-Z!.,@\"? ]+"));
-
         return (userInput);
-
     }
 
     /**
      * Ask the user to enter any integer value (negatives are allowed)
-     * if they do not enter an integer ask them again.
+     * if they do not enter an integer ask them again
      * 
      * @param prompt the question or prompt to ask the user
      * @return a valid int entered by the user
      */
     public int askUserForInt(String prompt) {
+        Scanner myKB = new Scanner(System.in);
         String userInput;
 
         do {
             System.out.println(prompt);
-            System.out.println("Enter integer values only please!");
-            userInput = myScanner.nextLine();
-
+            userInput = myKB.nextLine();
+            if (!userInput.matches("[0-9-]+")) {
+                System.out.println("Enter integer values only please! \n");
+            }
         } while (!userInput.matches("[0-9-]+"));
         // user has entered a numeric value but it is still a String
-
-        // returning the parsed userInput string to int.
-        return Integer.parseInt(userInput);
+        int userInt = Integer.parseInt(userInput);
+        return (userInt);
     }
 
     /**
-     * Asks the user to enter any integer value, 
-     * repeating the prompt if the input is not an integer.
+     * Ask user for an integer value bigger than a given minimum
+     * if they do not enter a valid integer ask them again
      * 
-     * @param prompt The question or prompt to ask the user.
-     * @return An integer value entered by the user.
+     * @param prompt   the question or prompt to ask user
+     * @param minValue the lowest value allowed
+     * @return a valid int bigger than minValue
      */
-    public int askUserForIntV2(String prompt) {
-        String userInput;
-        int userInt = 0;
-        boolean isValid = false;
-
-        do {
-            System.out.println(prompt);
-            System.out.println("Enter integer values only please!");
-            userInput = myScanner.nextLine();
-            try {
-                userInt = Integer.parseInt(userInput);
-                isValid = true;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter an integer value.");
-            }
-        } while (!isValid);
-
-        return userInt;
-    }
-
-    /**
-     * Ask the user to enter an integer value
-     * if not an integer - display error and ask again
-     * 
-     * @param prompt the prompt or question to ask
-     * @return a valid integer entered by user
-     */
-    public int askUserForIntV3(String prompt) {
+    public int askUserForInt(String prompt, int minValue) {
+        Scanner myKB = new Scanner(System.in);
         int userInput = 0;
         boolean valid = false;
 
@@ -102,36 +73,18 @@ public class InputUtilities {
             // this gets repeated
             try {
                 System.out.println(prompt);
-                System.out.println("Enter integer values only please!");
-                userInput = myScanner.nextInt(); // this might go wrong
+                System.out.println("You must enter a integer larger than " + minValue);
+                userInput = myKB.nextInt(); // this might go wrong
                 valid = true;
             } catch (Exception e) {
-                System.out.println("That was not an integer. Please try again.");
-                myScanner.nextLine(); // prevents infinite loop
+                System.out.println("That was not an integer value.");
+                myKB.nextLine(); // prevents infinite loop
+                valid = false; // just to be sure
             }
-        } while (!valid);
+            // use loop guard to check that input is greater than minValue
+        } while (!valid || (userInput <= minValue));
         // input must be valid
         return userInput;
-    }
-    /**
-     * Ask user for an integer value bigger than a given minimum
-     * if they do not enter a valid integer ask them again.
-     * 
-     * @param prompt   the question or prompt to ask user
-     * @param minValue the lowest value allowed
-     * @return a valid int bigger than minValue
-     */
-    public int askUserForInt(String prompt, int minValue) {
-
-        int userInt;
-        do {
-            userInt = askUserForInt(prompt); // Reuse the method to ask for an integer and maintain DRY (Don't Repeat
-                                             // Yourself) principles, enhancing code maintainability.
-            if (userInt < minValue) {
-                System.out.println("The number must be greater than or equal to " + minValue);
-            }
-        } while (userInt < minValue);
-        return userInt;
     }
 
     /**
@@ -145,14 +98,23 @@ public class InputUtilities {
      */
     public int askUserForInt(String prompt, int minValue, int maxValue) {
 
-        int userInt;
+        Scanner myKB = new Scanner(System.in);
+        int userInput = 0;
+        boolean valid = false;
+
         do {
-            userInt = askUserForInt(prompt); // Reuse the method to ask for an integer and maintain DRY (Don't Repeat
-                                             // Yourself) principles, enhancing code maintainability.
-            if (userInt < minValue || userInt > maxValue) {
-                System.out.println("The number must be between " + minValue + " and " + maxValue);
+            // this gets repeated
+            try {
+                System.out.println(prompt);
+                System.out.println("You must enter a value between " + minValue + " and " + maxValue);
+                userInput = myKB.nextInt(); // this might go wrong
+                valid = true;
+            } catch (Exception e) {
+                System.out.println("That was not an integer value.");
+                myKB.nextLine(); // prevents infinite loop
             }
-        } while (userInt < minValue || userInt > maxValue);
-        return userInt;
+        } while (!valid || (userInput < minValue) || (userInput > maxValue));
+        // input must be valid
+        return userInput;
     }
 }
