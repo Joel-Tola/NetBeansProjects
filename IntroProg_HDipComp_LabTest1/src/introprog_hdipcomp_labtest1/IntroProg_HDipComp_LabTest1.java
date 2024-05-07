@@ -72,7 +72,7 @@ public class IntroProg_HDipComp_LabTest1 {
 
         do {
             // Print the full list to display values.
-            // We don not need to do this! that is why we can to the same without an Array.
+            // We do not need to do this! that is why we can to the same without an Array.
             // We only need an Array if we are required to do something with it.
             String stringArray = Arrays.toString(inputArray);
             System.out.println(stringArray);

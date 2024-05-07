@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6b125847-3c9a-442a-9101-290dca3e268f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../LeaseCompanyApplication/src/inpututilities/InputUtilities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FirstProject/src/firstproject/FirstProject.java" beforeDir="false" afterPath="$PROJECT_DIR$/../FirstProject/src/firstproject/FirstProject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../IntroProg_HDipComp_LabTest1/src/introprog_hdipcomp_labtest1/IntroProg_HDipComp_LabTest1.java" beforeDir="false" afterPath="$PROJECT_DIR$/../IntroProg_HDipComp_LabTest1/src/introprog_hdipcomp_labtest1/IntroProg_HDipComp_LabTest1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MySQLConection/build.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MySQLConection/build.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MySQLConection/nbproject/build-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MySQLConection/nbproject/build-impl.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MySQLConection/nbproject/genfiles.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../MySQLConection/nbproject/genfiles.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MySQLConection/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../MySQLConection/nbproject/project.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MySQLConection/nbproject/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MySQLConection/nbproject/project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MySQLConection/src/mysqlconection/MySQLConection.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2g8PHSGiP5dc6DVbxB5dSkGNkfW" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Documents/NetBeansProjects/ShapesProject",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6b125847-3c9a-442a-9101-290dca3e268f" name="Changes" comment="" />
+      <created>1715076143456</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1715076143456</updated>
+      <workItem from="1715076144552" duration="40000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

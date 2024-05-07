@@ -6,6 +6,7 @@ package firstproject;
 
 import java.lang.Object;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 import java.io.BufferedReader;
@@ -51,6 +52,14 @@ public class FirstProject {
                 }
             }
         }
+
+
+        ArrayList<String> myArrayList = new ArrayList<>();
+        myArrayList.add("line1");
+
+        ArrayList<String> mySecondArrayList = new ArrayList<String>();
+        mySecondArrayList.add("line2");
+
         
     //     try {
     //         BufferedReader br = new BufferedReader(new FileReader(path));
