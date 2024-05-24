@@ -10,7 +10,7 @@ public class MySQLHandler {
 
     private static MySQLHandler instance = null;
     // Database connection details
-    private static final String URL = "jdbc:mysql://localhost:3306/rentaldb";
+    private static final String URL = "jdbc:mysql://localhost:3306/sales";
     private static final String USER = "root";
     private static final String PASSWORD = "admin";
     private Connection connection;
@@ -26,8 +26,10 @@ public class MySQLHandler {
     }
 
     public ResultSet executeQuery(String query) throws SQLException {
+        Statement myStmt;
+
         startConnection();
-        Statement myStmt = connection.createStatement();
+        myStmt = connection.createStatement();
         ResultSet myResults = myStmt.executeQuery(query);
         return myResults;
     }

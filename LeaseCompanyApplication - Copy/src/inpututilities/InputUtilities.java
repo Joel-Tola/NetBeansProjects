@@ -25,31 +25,12 @@ public class InputUtilities {
         String userInput;
 
         do {
-            System.out.print(prompt + " ");
+            System.out.println(prompt);
+            System.out.println("Enter text only please - no numbers!");
             userInput = myKB.nextLine();
-            
-            if (!userInput.matches("[a-zA-Z_!.,@\"? ]+")) {
-                System.out.println("Enter text only please - no numbers!");
-            }
 
-        } while (!userInput.matches("[a-zA-Z_!.,@\"? ]+"));
-        return userInput;
-    }
-
-    public String askUserForTextWithNumbers(String prompt) {
-        Scanner myKB = new Scanner(System.in);
-        String userInput;
-
-        do {
-            System.out.print(prompt + " ");
-            userInput = myKB.nextLine();
-            
-            if (!userInput.matches("[a-zA-Z0-9_!.,@\"? ]+")) {
-                System.out.println("Enter text only please - no numbers!");
-            }
-
-        } while (!userInput.matches("[a-zA-Z0-9_!.,@\"? ]+"));
-        return userInput;
+        } while (!userInput.matches("[a-zA-Z!.,@\"? ]+"));
+        return (userInput);
     }
 
     /**
@@ -64,7 +45,7 @@ public class InputUtilities {
         String userInput;
 
         do {
-            System.out.print(prompt);
+            System.out.println(prompt);
             userInput = myKB.nextLine();
             if (!userInput.matches("[0-9-]+")) {
                 System.out.println("Enter integer values only please!");
@@ -137,22 +118,4 @@ public class InputUtilities {
         // input must be valid
         return userInput;
     }
-
-    public String askUserForDate(String prompt) {
-        Scanner myKB = new Scanner(System.in);
-        String userInput;
-        boolean isValidDate = false;
-
-        do {
-            System.out.print(prompt + " ");
-            userInput = myKB.nextLine();
-            isValidDate = userInput.matches("\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
-
-            if (!isValidDate) {
-                System.out.println("Enter date in the format YYYY-MM-DD");
-            }
-
-        } while (!isValidDate);
-        return userInput;
-    };
 }

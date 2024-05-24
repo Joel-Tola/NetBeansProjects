@@ -9,5 +9,25 @@ package Shape;
  * @author sljoe
  */
 public class Triangle {
+
+    int height;
+    int length;
+
+    public double getArea() {
+        return 0.0;
+    }
+
+    public void test(){
+
+        Triangle myTriangle = new Triangle();
+        myTriangle.getClass();
+        myTriangle.getArea();
+        myTriangle.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Este es un triangulo con " + height + "y" + "length";
+    }
     
 }
