@@ -16,7 +16,7 @@ public class MySQLConnection {
 
     private static MySQLConnection instance = null;
     // Database connection details
-    private static final String URL = "jdbc:mysql://localhost:3306/rentaldb";
+    private static final String URL = "jdbc:mysql://localhost:3306/RentalDB";
     private static final String USER = "root";
     private static final String PASSWORD = "admin";
     private Connection connection;

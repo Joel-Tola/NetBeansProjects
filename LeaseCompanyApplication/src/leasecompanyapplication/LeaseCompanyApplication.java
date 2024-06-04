@@ -208,7 +208,7 @@ public class LeaseCompanyApplication {
             System.out.println("Available options: " + tables);
 
             // Ask the user to input the name of the table they want to view
-            String userInput = inputHandler.askUserForText("Please insert table name: ").toLowerCase();
+            String userInput = inputHandler.askUserForText("Please insert table name: ");
             if (tables.contains(userInput)) {
                 // If the user input matches an existing table, construct and execute a query to
                 // fetch all records from that table
