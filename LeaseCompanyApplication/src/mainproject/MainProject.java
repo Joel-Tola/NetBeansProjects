@@ -53,9 +53,6 @@ public class MainProject {
 
                         System.out.println(); // New line after headers
 
-
-                        
-
                         // Print records
                         while (myResults.next()) {
                             for (int i = 1; i <= columnCount; i++) {

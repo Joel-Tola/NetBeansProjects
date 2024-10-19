@@ -9,7 +9,7 @@ import java.util.Scanner;
 /**
  * HDIP Comp Feb 2024 cohort
  * 
- * @author kheal
+ * @author Joel Tola
  */
 public class InputUtilities {
 
@@ -25,22 +25,31 @@ public class InputUtilities {
         String userInput;
 
         do {
-            System.out.println(prompt);
-            System.out.println("Enter text only please - no numbers!");
+            System.out.print(prompt + " ");
             userInput = myKB.nextLine();
+            
+            if (!userInput.matches("[a-zA-Z_!.,@\"? ]+")) {
+                System.out.println("Enter text only please - no numbers!");
+            }
 
-        } while (!userInput.matches("[a-zA-Z!.,@\"? ]+"));
-        return (userInput);
+        } while (!userInput.matches("[a-zA-Z_!.,@\"? ]+"));
+        return userInput;
     }
 
-    public String askUserForInput(String prompt) {
+    public String askUserForTextWithNumbers(String prompt) {
         Scanner myKB = new Scanner(System.in);
         String userInput;
 
-        System.out.println(prompt);
-        userInput = myKB.nextLine();
-        
-        return (userInput);
+        do {
+            System.out.print(prompt + " ");
+            userInput = myKB.nextLine();
+            
+            if (!userInput.matches("[a-zA-Z0-9_!.,@\"? ]+")) {
+                System.out.println("Enter text only please - no numbers!");
+            }
+
+        } while (!userInput.matches("[a-zA-Z0-9_!.,@\"? ]+"));
+        return userInput;
     }
 
     /**
@@ -52,19 +61,27 @@ public class InputUtilities {
      */
     public int askUserForInt(String prompt) {
         Scanner myKB = new Scanner(System.in);
-        String userInput;
+        int userInput = 0;
+        boolean valid = false;
+        String errorMessage = "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n" +
+        "\t Enter integer values only please! \n" +
+        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n";
 
         do {
-            System.out.println(prompt);
-            userInput = myKB.nextLine();
-            if (!userInput.matches("[0-9-]+")) {
-                System.out.println("Enter integer values only please!");
+            // this gets repeated
+            try {
+                System.out.println(prompt);
+                userInput = myKB.nextInt(); // this might go wrong
+                valid = true;
+            } catch (Exception e) {
+                System.out.println(errorMessage);
+                myKB.nextLine(); // prevents infinite loop
+                valid = false; // just to be sure
             }
-
-        } while (!userInput.matches("[0-9-]+"));
-        // user has entered a numeric value but it is still a String
-        int userInt = Integer.parseInt(userInput);
-        return (userInt);
+            // use loop guard to check that input is greater than minValue
+        } while (!valid);
+        // input must be valid
+        return userInput;
     }
 
     /**
@@ -129,21 +146,21 @@ public class InputUtilities {
         return userInput;
     }
 
-    public int askUserForPositiveNumber() {
-        Scanner scanner = new Scanner(System.in);
-        int number;
-        try {
-            do {
-                number = scanner.nextInt();
-                if (number < 0) {
-                    System.out.println("Please insert a positive number");
-                }
-            } while (number < 0);
+    public String askUserForDate(String prompt) {
+        Scanner myKB = new Scanner(System.in);
+        String userInput;
+        boolean isValidDate = false;
 
-            return number;
-        } catch (Exception e) {
-            System.out.println("Please insert a valid number");
-            return askUserForPositiveNumber();
-        }
-    }
+        do {
+            System.out.print(prompt + " ");
+            userInput = myKB.nextLine();
+            isValidDate = userInput.matches("\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
+
+            if (!isValidDate) {
+                System.out.println("Enter date in the format YYYY-MM-DD");
+            }
+
+        } while (!isValidDate);
+        return userInput;
+    };
 }

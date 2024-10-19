@@ -142,8 +142,7 @@ public class InputUtilities {
 
             return number;
         } catch (Exception e) {
-            System.out.println("Please insert a valid number");
-            return askUserForPositiveNumber();
+            return askUserForInt("Please insert a valid number");
         }
     }
 }

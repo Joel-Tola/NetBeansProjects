@@ -22,36 +22,27 @@ public class SimpleScannerExample {
         String ans = "";
         int num;
 
-        // String EXPECTED_STRING = "String Interpolation in Java with some Java examples.";
-        // String first = "Interpolation";
-        // String second = "Java";
-        // String result = String.format("String %s in %s with some %s examples.", first, second, second);
-
         try {
-            // System.out.println("Insert your name");
-            // String myName = readLine();
-            // System.out.println("What is your age?");
-            // int myAge = readNumber();
-            // System.out.println(MessageFormat.format("Your Name is {0}, your Age is {1}", myName, myAge));
 
             System.out.println("Insert a number please");
-            num = readNumber();
+            num = readPositiveNumber();
 
-            
-            while (num > 0) {
-                if (num % 2 == 0) {
-                    ans = "0" + ans;
-                } else {
-                    ans = "1" + ans;
-                }
-    
-                num = num / 2;
+            if (isEven(num)) {
+                System.out.println("Number " + num + " is even");
+            } else {
+                System.out.println("Number " + num + " is odd");
             }
-            System.out.println(ans);
 
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public static boolean isEven(int num) {
+        if (num == 0 )
+            return true;
+        
+        return num % 2 == 0;
     }
 
     private static int readNumber() {
@@ -59,6 +50,24 @@ public class SimpleScannerExample {
         int number;
         try {
             number = scanner.nextInt();
+            return number;
+        } catch (Exception e) {
+            System.out.println("Please insert a valid number");
+            return readNumber();
+        }
+    }
+
+    private static int readPositiveNumber() {
+        Scanner scanner = new Scanner(System.in);
+        int number;
+        try {
+            do {
+                number = scanner.nextInt();
+                if (number < 0) {
+                    System.out.println("Please insert a positive number");
+                }
+            } while (number < 0);
+
             return number;
         } catch (Exception e) {
             System.out.println("Please insert a valid number");
