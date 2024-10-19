@@ -10,6 +10,11 @@ public class LibraryTech {
 
     static Scanner scanner = new Scanner(System.in);
 
+    private static final double NANO_TO_MILLIS = 1000000.0;
+    private static final int SEPARATOR_LENGTH = 86;
+    private static final String SEPARATOR_CHAR = "-";
+
+
     public static void main(String[] args) {
         // Prompt the user for the CSV filename
         String fileName = getFilenameFromUser();
@@ -75,6 +80,7 @@ public class LibraryTech {
                         break;
                     case EXIT:
                         System.out.println("Closing Program... Thank You!");
+                        scanner.close(); // Close the scanner
                         break;
                 }
             }
@@ -183,12 +189,18 @@ public class LibraryTech {
 
         if (option == SearchOption.ByTITLE) {
             scanner.nextLine(); // consume the leftover newline
-            System.out.println("Please enter the partial title of the book you wish to find:");
-            String searchTitle = scanner.nextLine();
+            String searchTitle;
+            do {
+                System.out.println("Please enter the partial title of the book you wish to find:");
+                searchTitle = scanner.nextLine().trim();
+                if (searchTitle.isEmpty()) {
+                    System.out.println("Input cannot be empty. Please try again.");
+                }
+            } while (searchTitle.isEmpty());
             matchedIndices = partialTitleSearch(bookTitles, searchTitle);
         } else if (option == SearchOption.ByPAGES) {
-            System.out.println("Please enter the number of pages to search for:");
-            int searchPages = scanner.nextInt();
+            int searchPages = askUserForInt("Please enter the number of pages to search for:");
+            scanner.nextLine(); // Consume the leftover newline
             matchedIndices = partialPageSearch(bookPages, searchPages);
         }
 
@@ -228,7 +240,7 @@ public class LibraryTech {
             long startTime = System.nanoTime();
             quickSort(titlesClone, pagesClone, 0, size - 1, true);
             long endTime = System.nanoTime();
-            double quickSortTimeTitles = (endTime - startTime) / 1_000_000.0;
+            double quickSortTimeTitles = (endTime - startTime) / NANO_TO_MILLIS;
 
             // Assess Quick Sort (Pages)
             titlesClone = sampleTitles.clone();
@@ -236,13 +248,13 @@ public class LibraryTech {
             startTime = System.nanoTime();
             quickSort(pagesClone, titlesClone, 0, size - 1, true);
             endTime = System.nanoTime();
-            double quickSortTimePages = (endTime - startTime) / 1_000_000.0;
+            double quickSortTimePages = (endTime - startTime) / NANO_TO_MILLIS;
 
             // Assess Linear Search (Titles)
             startTime = System.nanoTime();
             linearSearch(sampleTitles, "Non-Existent Book");
             endTime = System.nanoTime();
-            double linearSearchTime = (endTime - startTime) / 1_000_000.0;
+            double linearSearchTime = (endTime - startTime) / NANO_TO_MILLIS;
 
             // Assess Binary Search (Titles)
             titlesClone = sampleTitles.clone();
@@ -251,7 +263,7 @@ public class LibraryTech {
             startTime = System.nanoTime();
             binarySearchTitle(titlesClone, "Non-Existent Book");
             endTime = System.nanoTime();
-            double binarySearchTime = (endTime - startTime) / 1_000_000.0;
+            double binarySearchTime = (endTime - startTime) / NANO_TO_MILLIS;
 
             // Display Results
             System.out.printf("Quick Sort Time (Titles): %.2f ms\n", quickSortTimeTitles);
@@ -291,6 +303,8 @@ public class LibraryTech {
             System.out.println("File read successfully");
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
+        }  catch (NumberFormatException e) {
+            System.out.println("Error parsing number from file: " + e.getMessage());
         }
     }
 
@@ -433,7 +447,9 @@ public class LibraryTech {
             scanner.next();
             System.out.print("Invalid input, please enter a number: ");
         }
-        return scanner.nextInt();
+        int result = scanner.nextInt();
+        scanner.nextLine(); // Consume the leftover newline
+        return result;
     }
 
     // Method to format and display book titles and pages

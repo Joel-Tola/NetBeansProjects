@@ -20,6 +20,12 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
 
     static Scanner scanner = new Scanner(System.in);
 
+    private static final double NANO_TO_MILLIS = 1000000.0;
+    private static final int SEPARATOR_LENGTH = 86;
+    private static final String SEPARATOR_CHAR = "-";
+    private static final String HEADER_FORMAT = "%-5s %-60s %5s\n";
+    private static final String SEPARATOR = String.join("", Collections.nCopies(SEPARATOR_LENGTH, SEPARATOR_CHAR));
+
     public static void main(String[] args) {
         // Prompt the user for the CSV filename
         String fileName = getFilenameFromUser();
@@ -85,6 +91,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
                         break;
                     case EXIT:
                         System.out.println("Closing Program... Thank You!");
+                        scanner.close();
                         break;
                 }
             }
@@ -150,13 +157,22 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
                 }
                 long endTime = System.nanoTime();
 
-                System.out.println("Sorted by " + (sortOption == SortingOption.ByTITLE ? "Book Title" : "Number of Pages")
-                        + " - " + (sortingOrder == SortingOrder.ASCENDING ? "Ascending" : "Descending"));
+                // Separator
+                System.out.println(SEPARATOR);
+                System.out.printf("Sorted by %s - %s\n",
+                    (sortOption == SortingOption.ByTITLE ? "Book Title" : "Number of Pages"),
+                    (sortingOrder == SortingOrder.ASCENDING ? "Ascending" : "Descending"));
+
+                // Separator
+                System.out.println(SEPARATOR);
 
                 // Format and display the first 50 results after sorting
                 formatAndDisplayBooks(bookTitlesClone, bookPagesClone);
 
-                System.out.println("Sorting took: " + (endTime - startTime) / 1_000_000 + " ms");
+                System.out.println("Sorting took: " + (endTime - startTime) / NANO_TO_MILLIS + " ms");
+
+                // Separator
+                System.out.println(SEPARATOR);
             }
         } while (true);
     }
@@ -192,38 +208,46 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
         List<Integer> matchedIndices = new ArrayList<>();
 
         if (option == SearchOption.ByTITLE) {
-            scanner.nextLine(); // consume the leftover newline
-            System.out.println("Please enter the partial title of the book you wish to find:");
-            String searchTitle = scanner.nextLine();
+            String searchTitle;
+            do {
+                System.out.println("Please enter the partial title of the book you wish to find:");
+                searchTitle = scanner.nextLine().trim();
+                if (searchTitle.isEmpty()) {
+                    System.out.println("Input cannot be empty. Please try again.");
+                }
+            } while (searchTitle.isEmpty());
             matchedIndices = partialTitleSearch(bookTitles, searchTitle);
         } else if (option == SearchOption.ByPAGES) {
-            System.out.println("Please enter the number of pages to search for:");
-            int searchPages = scanner.nextInt();
+            int searchPages = askUserForInt("Please enter the number of pages to search for:");
             matchedIndices = partialPageSearch(bookPages, searchPages);
         }
 
         long endTime = System.nanoTime();
 
+        System.out.println(SEPARATOR);
+
         if (!matchedIndices.isEmpty()) {
             System.out.println("Books found:");
+            System.out.printf(HEADER_FORMAT, "Index", "Book Title", "Pages");
+            System.out.println(SEPARATOR);
             for (int index : matchedIndices) {
-                System.out.println(bookTitles[index] + " - " + bookPages[index] + " pages");
+                System.out.printf(HEADER_FORMAT, index, bookTitles[index], bookPages[index]);
             }
         } else {
             System.out.println("No books found matching your search criteria.");
         }
 
-        System.out.println("Searching took: " + (endTime - startTime) / 1_000_000 + " ms");
+        System.out.println("Searching took: " + (endTime - startTime) / NANO_TO_MILLIS + " ms");
     }
 
     private static void assessAlgorithms() {
         System.out.println("Assessing Sorting and Searching Algorithms...");
-
+    
         int[] dataSizes = {1000, 5000, 10000}; // Example data sizes
-
+    
         for (int size : dataSizes) {
             System.out.println("\nData Size: " + size);
-
+    
             // Generate sample data
             String[] sampleTitles = new String[size];
             int[] samplePages = new int[size];
@@ -231,47 +255,108 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
                 sampleTitles[i] = "Book " + i;
                 samplePages[i] = (int) (Math.random() * 1000) + 100;
             }
-
-            // TODO bubble sort
-
-            // Assess Quick Sort (Titles)
-            String[] titlesClone = sampleTitles.clone();
-            int[] pagesClone = samplePages.clone();
+    
+            // ---- Sorting by Title ----
+    
+            // Quick Sort (Titles)
+            String[] titlesCloneQS = sampleTitles.clone();
+            int[] pagesCloneQS = samplePages.clone();
             long startTime = System.nanoTime();
-            quickSort(titlesClone, pagesClone, 0, size - 1, true);
+            quickSort(titlesCloneQS, pagesCloneQS, 0, size - 1, true);
             long endTime = System.nanoTime();
-            double quickSortTimeTitles = (endTime - startTime) / 1_000_000.0;
-
-            // Assess Quick Sort (Pages)
-            titlesClone = sampleTitles.clone();
-            pagesClone = samplePages.clone();
+            double quickSortTimeTitles = (endTime - startTime) / NANO_TO_MILLIS ;
+    
+            // Bubble Sort (Titles)
+            String[] titlesCloneBS = sampleTitles.clone();
+            int[] pagesCloneBS = samplePages.clone();
             startTime = System.nanoTime();
-            quickSort(pagesClone, titlesClone, 0, size - 1, true);
+            bubbleSort(titlesCloneBS, pagesCloneBS, true);
             endTime = System.nanoTime();
-            double quickSortTimePages = (endTime - startTime) / 1_000_000.0;
-
-            // Assess Linear Search (Titles)
+            double bubbleSortTimeTitles = (endTime - startTime) / NANO_TO_MILLIS ;
+    
+            // Determine better algorithm for sorting titles
+            String betterSortTitle;
+            if (quickSortTimeTitles < bubbleSortTimeTitles) {
+                betterSortTitle = "Quick Sort";
+            } else if (quickSortTimeTitles > bubbleSortTimeTitles) {
+                betterSortTitle = "Bubble Sort";
+            } else {
+                betterSortTitle = "Both algorithms performed equally";
+            }
+    
+            // ---- Sorting by Pages ----
+    
+            // Quick Sort (Pages)
+            titlesCloneQS = sampleTitles.clone();
+            pagesCloneQS = samplePages.clone();
+            startTime = System.nanoTime();
+            quickSort(pagesCloneQS, titlesCloneQS, 0, size - 1, true);
+            endTime = System.nanoTime();
+            double quickSortTimePages = (endTime - startTime) / NANO_TO_MILLIS ;
+    
+            // Bubble Sort (Pages)
+            titlesCloneBS = sampleTitles.clone();
+            pagesCloneBS = samplePages.clone();
+            startTime = System.nanoTime();
+            bubbleSort(pagesCloneBS, titlesCloneBS, true);
+            endTime = System.nanoTime();
+            double bubbleSortTimePages = (endTime - startTime) / NANO_TO_MILLIS ;
+    
+            // Determine better algorithm for sorting pages
+            String betterSortPages;
+            if (quickSortTimePages < bubbleSortTimePages) {
+                betterSortPages = "Quick Sort";
+            } else if (quickSortTimePages > bubbleSortTimePages) {
+                betterSortPages = "Bubble Sort";
+            } else {
+                betterSortPages = "Both algorithms performed equally";
+            }
+    
+            // ---- Searching Titles ----
+    
+            // Linear Search (Titles)
             startTime = System.nanoTime();
             linearSearch(sampleTitles, "Non-Existent Book");
             endTime = System.nanoTime();
-            double linearSearchTime = (endTime - startTime) / 1_000_000.0;
-
-            // Assess Binary Search (Titles)
-            titlesClone = sampleTitles.clone();
-            pagesClone = samplePages.clone();
-            quickSort(titlesClone, pagesClone, 0, size - 1, true); // Data must be sorted for binary search
+            double linearSearchTime = (endTime - startTime) / NANO_TO_MILLIS ;
+    
+            // Binary Search (Titles)
+            titlesCloneQS = sampleTitles.clone();
+            pagesCloneQS = samplePages.clone();
+            quickSort(titlesCloneQS, pagesCloneQS, 0, size - 1, true); // Data must be sorted for binary search
             startTime = System.nanoTime();
-            binarySearchTitle(titlesClone, "Non-Existent Book");
+            binarySearchTitle(titlesCloneQS, "Non-Existent Book");
             endTime = System.nanoTime();
-            double binarySearchTime = (endTime - startTime) / 1_000_000.0;
-
-            // Display Results
-            System.out.printf("Quick Sort Time (Titles): %.2f ms\n", quickSortTimeTitles);
-            System.out.printf("Quick Sort Time (Pages): %.2f ms\n", quickSortTimePages);
-            System.out.printf("Linear Search Time (Titles): %.6f ms\n", linearSearchTime);
-            System.out.printf("Binary Search Time (Titles): %.6f ms\n", binarySearchTime);
+            double binarySearchTime = (endTime - startTime) / NANO_TO_MILLIS ;
+    
+            // Determine better algorithm for searching titles
+            String betterSearchTitle;
+            if (linearSearchTime < binarySearchTime) {
+                betterSearchTitle = "Linear Search";
+            } else if (linearSearchTime > binarySearchTime) {
+                betterSearchTitle = "Binary Search";
+            } else {
+                betterSearchTitle = "Both algorithms performed equally";
+            }
+    
+            // ---- Display Results ----
+    
+            System.out.println("----- Sorting by Title -----");
+            System.out.printf("Quick Sort Time: %.2f ms\n", quickSortTimeTitles);
+            System.out.printf("Bubble Sort Time: %.2f ms\n", bubbleSortTimeTitles);
+            System.out.println("Better Algorithm for Sorting Titles: " + betterSortTitle);
+    
+            System.out.println("\n----- Sorting by Pages -----");
+            System.out.printf("Quick Sort Time: %.2f ms\n", quickSortTimePages);
+            System.out.printf("Bubble Sort Time: %.2f ms\n", bubbleSortTimePages);
+            System.out.println("Better Algorithm for Sorting Pages: " + betterSortPages);
+    
+            System.out.println("\n----- Searching Titles -----");
+            System.out.printf("Linear Search Time: %.6f ms\n", linearSearchTime);
+            System.out.printf("Binary Search Time: %.6f ms\n", binarySearchTime);
+            System.out.println("Better Algorithm for Searching Titles: " + betterSearchTitle);
         }
-    }
+    }     
 
     public static void readFile(String filename) {
         bookCount = 0;
@@ -303,6 +388,55 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
             System.out.println("File read successfully");
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing number from file: " + e.getMessage());
+            System.exit(1);
+        }
+    }
+
+    // Bubble Sort for Titles
+    public static void bubbleSort(String[] titles, int[] pages, boolean ascending) {
+        int n = titles.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                boolean condition = ascending
+                        ? titles[j].compareToIgnoreCase(titles[j + 1]) > 0
+                        : titles[j].compareToIgnoreCase(titles[j + 1]) < 0;
+
+                if (condition) {
+                    // Swap titles
+                    String tempTitle = titles[j];
+                    titles[j] = titles[j + 1];
+                    titles[j + 1] = tempTitle;
+
+                    // Swap pages
+                    int tempPage = pages[j];
+                    pages[j] = pages[j + 1];
+                    pages[j + 1] = tempPage;
+                }
+            }
+        }
+    }
+
+    // Bubble Sort for Pages
+    public static void bubbleSort(int[] pages, String[] titles, boolean ascending) {
+        int n = pages.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                boolean condition = ascending ? pages[j] > pages[j + 1] : pages[j] < pages[j + 1];
+
+                if (condition) {
+                    // Swap pages
+                    int tempPage = pages[j];
+                    pages[j] = pages[j + 1];
+                    pages[j + 1] = tempPage;
+
+                    // Swap titles
+                    String tempTitle = titles[j];
+                    titles[j] = titles[j + 1];
+                    titles[j + 1] = tempTitle;
+                }
+            }
         }
     }
 
@@ -440,21 +574,27 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     public static int askUserForInt(String message) {
-        System.out.print(message);
-        while (!scanner.hasNextInt()) {
-            scanner.next();
-            System.out.print("Invalid input, please enter a number: ");
+        int result = -1;
+        boolean valid = false;
+        while (!valid) {
+            System.out.print(message);
+            try {
+                result = Integer.parseInt(scanner.nextLine().trim());
+                valid = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, please enter a valid integer.");
+            }
         }
-        return scanner.nextInt();
+        return result;
     }
 
     // Method to format and display book titles and pages
     private static void formatAndDisplayBooks(String[] bookTitles, int[] bookPages) {
-        System.out.printf("%-80s %5s\n", "Book Title", "Pages");
-        System.out.println("--------------------------------------------------------------------------------------");
+        System.out.printf(HEADER_FORMAT, "Index", "Book Title", "Pages");
+        System.out.println(SEPARATOR);
 
         for (int i = 0; i < Math.min(50, bookTitles.length); i++) {
-            System.out.printf("%-80s %5d\n", bookTitles[i], bookPages[i]);
+            System.out.printf(HEADER_FORMAT, "[" + i + "]", bookTitles[i], bookPages[i]);
         }
     }
 
