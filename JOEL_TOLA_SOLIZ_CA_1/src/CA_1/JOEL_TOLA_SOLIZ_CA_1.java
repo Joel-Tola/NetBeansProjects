@@ -30,15 +30,15 @@ import java.util.*;
  * across methods.
  * 
  * Attributes:
- * - `bookTitles`: An array of strings that stores the titles of books.
- * - `bookPages`: An array of integers that stores the corresponding number of pages for each book.
- * - `bookCount`: An integer that represents the total number of books (derived from the data file).
- * - `scanner`: A `Scanner` object for reading user input from the console.
- * - `NANO_TO_MILLIS`: A constant used to convert nanoseconds to milliseconds when measuring time.
- * - `SEPARATOR_LENGTH`: A constant that defines the length of the separator used in printed outputs.
- * - `SEPARATOR_CHAR`: A constant that defines the character used to create visual separators in outputs.
- * - `HEADER_FORMAT`: A constant that defines the format used for printing headers in formatted outputs.
- * - `SEPARATOR`: A constant that defines a precomputed separator string used in formatted output.
+ * - bookTitles: An array of strings that stores the titles of books.
+ * - bookPages: An array of integers that stores the corresponding number of pages for each book.
+ * - bookCount: An integer that represents the total number of books (derived from the data file).
+ * - scanner: A Scanner object for reading user input from the console.
+ * - NANO_TO_MILLIS: A constant used to convert nanoseconds to milliseconds when measuring time.
+ * - SEPARATOR_LENGTH: A constant that defines the length of the separator used in printed outputs.
+ * - SEPARATOR_CHAR: A constant that defines the character used to create visual separators in outputs.
+ * - HEADER_FORMAT: A constant that defines the format used for printing headers in formatted outputs.
+ * - SEPARATOR: A constant that defines a precomputed separator string used in formatted output.
  * 
  * The class is structured to be flexible for further expansion, such as adding more search and sorting
  * methods or handling additional book attributes.
@@ -59,10 +59,10 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     private static final String SEPARATOR = String.join("", Collections.nCopies(SEPARATOR_LENGTH, SEPARATOR_CHAR));
 
     /**
-     * The `main` method is the entry point of the program. It controls the flow of the application by:
+     * The main method is the entry point of the program. It controls the flow of the application by:
      * 1. Prompting the user for the CSV file that contains book data.
      * 2. Reading the data from the file into arrays for book titles and page counts.
-     * 3. Invoking the `mainMenu` method to present the user with options to sort, search, or assess algorithms.
+     * 3. Invoking the mainMenu method to present the user with options to sort, search, or assess algorithms.
      *
      * This method uses helper methods to handle specific tasks such as getting the file name from the user 
      * and reading the file contents. The actual functionality of sorting, searching, and assessment is 
@@ -74,7 +74,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * 
      * **Drawbacks:**
      * - No error handling for edge cases like invalid file formats or files with missing data. Although handled 
-     *   in `readFile`, no recovery mechanism is in place in case of failure.
+     *   in readFile, no recovery mechanism is in place in case of failure.
      * 
      * **Possible Improvements:**
      * - Add error handling and user feedback for cases where the file read operation fails.
@@ -90,7 +90,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
 
         /**
          * After reading the file, we need to ensure that the book data was successfully loaded. 
-         * If `bookTitles`, `bookPages`, or `bookCount` are invalid (i.e., `null` or empty), it 
+         * If bookTitles, bookPages, or bookCount are invalid (i.e., null or empty), it 
          * indicates that no valid data was loaded, and the program should finish.
          */
         if (bookTitles == null || bookPages == null || bookCount == 0) {
@@ -103,11 +103,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `getFilenameFromUser` method prompts the user to input the name of a CSV file that contains book data.
+     * The getFilenameFromUser method prompts the user to input the name of a CSV file that contains book data.
      * It repeatedly asks the user for a valid filename until the file is found and can be read successfully.
      *
      * This method utilizes a loop that continues until a valid file is provided. The file's existence and 
-     * readability are verified using the `fileExists` method. If a valid file is found, the filename is returned.
+     * readability are verified using the fileExists method. If a valid file is found, the filename is returned.
      *
      * **Advantages:**
      * - Ensures the user provides a valid filename before proceeding, reducing the likelihood of file-related errors later in the program.
@@ -121,8 +121,8 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * - Add an exit option where users can type "exit" or "quit" to leave the loop if they do not wish to continue providing filenames.
      *
      * @return String - Returns the filename provided by the user if it exists and can be read.
-     * @throws IOException - This method itself does not throw exceptions directly! but delegates the file checking to `fileExists`.
-     *                       However, `fileExists` internally handles `IOException` in its logic.
+     * @throws IOException - This method itself does not throw exceptions directly! but delegates the file checking to fileExists.
+     *                       However, fileExists internally handles IOException in its logic.
      */
     private static String getFilenameFromUser() {
         String filename;
@@ -144,10 +144,10 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `fileExists` method checks if the specified file exists and can be opened for reading. It attempts to open
-     * the file using a `BufferedReader`. If the file can be opened without errors, the method returns `true`, indicating
-     * that the file exists and is readable. If an `IOException` occurs (e.g., the file does not exist, the file path is
-     * incorrect, or the file cannot be read due to permissions), the method returns `false`.
+     * The fileExists method checks if the specified file exists and can be opened for reading. It attempts to open
+     * the file using a BufferedReader. If the file can be opened without errors, the method returns true, indicating
+     * that the file exists and is readable. If an IOException occurs (e.g., the file does not exist, the file path is
+     * incorrect, or the file cannot be read due to permissions), the method returns false.
      * 
      * **Advantages:**
      * - Simple and effective way to determine if a file can be accessed before attempting to process it.
@@ -157,11 +157,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * - This method does not distinguish between different causes of failure. It only returns false without further explanations.
      * 
      * **Possible Improvements:**
-     * - Log the exception details and/or return specific error messages based on the cause of the `IOException`.
+     * - Log the exception details and/or return specific error messages based on the cause of the IOException.
      *
      * @param filename The name of the file to check.
-     * @return boolean - Returns `true` if the file exists and can be read, `false` if the file cannot be opened.
-     * @throws IOException - This method internally catches `IOException` and returns `false` when an exception occurs. It does not propagate exceptions.
+     * @return boolean - Returns true if the file exists and can be read, false if the file cannot be opened.
+     * @throws IOException - This method internally catches IOException and returns false when an exception occurs. It does not propagate exceptions.
      */
     private static boolean fileExists(String filename) {
         // Try to open the file using a BufferedReader
@@ -175,7 +175,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `mainMenu` method displays the main menu of the program and handles user interaction by 
+     * The mainMenu method displays the main menu of the program and handles user interaction by 
      * allowing them to choose between sorting, searching, assessing algorithms, or exiting the program.
      * 
      * The method presents a set of options to the user, prompting them to input their choice. 
@@ -195,7 +195,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * - Provide more detailed feedback if an invalid option is selected multiple times, such as offering examples of valid input.
      * 
      * @throws InputMismatchException - This method depends on askUserForInt method for input handling, which 
-     *                                 may throw an `InputMismatchException` if non-integer input is provided.
+     *                                 may throw an InputMismatchException if non-integer input is provided.
      */
     private static void mainMenu() {
         // Define the main menu options as a formatted string
@@ -242,11 +242,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     
 
     /**
-     * The `sortingMenu` method presents the user with sorting options for the book data. The user can choose
-     * to sort the books by title or by the number of pages. The method then calls `sortingOrderMenu` to further
+     * The sortingMenu method presents the user with sorting options for the book data. The user can choose
+     * to sort the books by title or by the number of pages. The method then calls sortingOrderMenu to further
      * ask the user whether they want to sort in ascending or descending order.
      * 
-     * The method uses a `do-while` loop to continuously display the menu until the user selects the "BACK" option,
+     * The method uses a do-while loop to continuously display the menu until the user selects the "BACK" option,
      * which returns them to the main menu.
      * 
      * **Advantages:**
@@ -259,8 +259,8 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * **Possible Improvements:**
      * - Allow the user to input words like "title", "pages", or "back" instead of just numbers for a more user-friendly experience.
      *
-     * @throws InputMismatchException - This method depends on `askUserForInt` for input handling, which 
-     *                                 may throw an `InputMismatchException` if non-integer input is provided.
+     * @throws InputMismatchException - This method depends on askUserForInt for input handling, which 
+     *                                 may throw an InputMismatchException if non-integer input is provided.
      */
     private static void sortingMenu() {
         // Define the sorting menu options as a formatted string
@@ -295,11 +295,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `sortingOrderMenu` method presents the user with options to sort the book data either in ascending
+     * The sortingOrderMenu method presents the user with options to sort the book data either in ascending
      * or descending order. This method is called after the user has selected a sorting criteria (by title or by pages).
      * 
      * Once the user selects the sorting order, the method performs a sorting operation on a cloned version of 
-     * the `bookTitles` and `bookPages` arrays. The sorted results are then displayed to the user, and the time 
+     * the bookTitles and bookPages arrays. The sorted results are then displayed to the user, and the time 
      * taken for the sorting operation is measured and printed.
      * 
      * **Advantages:**
@@ -313,8 +313,8 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * - Allow users to input keywords like "ascending" or "descending" instead of just numbers.
      *
      * @param sortOption The sorting criterion selected by the user (either by title or by pages).
-     * @throws InputMismatchException - This method depends on `askUserForInt` for input handling, which 
-     *                                 may throw an `InputMismatchException` if non-integer input is provided.
+     * @throws InputMismatchException - This method depends on askUserForInt for input handling, which 
+     *                                 may throw an InputMismatchException if non-integer input is provided.
      */
     private static void sortingOrderMenu(SortingOption sortOption) {
         // Define the sorting order menu options as a formatted string
@@ -381,11 +381,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     
 
     /**
-     * The `searchingMenu` method presents the user with options for searching the book data either by title or 
-     * by the number of pages. Based on the user's selection, the method calls the `searchBooks` method to perform 
+     * The searchingMenu method presents the user with options for searching the book data either by title or 
+     * by the number of pages. Based on the user's selection, the method calls the searchBooks method to perform 
      * the search operation. The user also has the option to go back to the main menu.
      * 
-     * The method uses a `do-while` loop to continuously display the search menu until the user selects the "BACK" option.
+     * The method uses a do-while loop to continuously display the search menu until the user selects the "BACK" option.
      * 
      * **Advantages:**
      * - Provides a modular interface for users to choose the search criteria (either by title or by pages).
@@ -397,8 +397,8 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * **Possible Improvements:**
      * - Allow users to input keywords like "title" or "pages" instead of just numbers for a more user-friendly experience.
      *
-     * @throws InputMismatchException - This method depends on `askUserForInt` for input handling, which 
-     *                                 may throw an `InputMismatchException` if non-integer input is provided.
+     * @throws InputMismatchException - This method depends on askUserForInt for input handling, which 
+     *                                 may throw an InputMismatchException if non-integer input is provided.
      */
     private static void searchingMenu() {
         // Define the search menu options as a formatted string
@@ -433,11 +433,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `searchBooks` method performs a search operation based on the user's input. The user can search
+     * The searchBooks method performs a search operation based on the user's input. The user can search
      * for books either by title (*partial match*) or by the number of pages. The method measures the time taken
      * for the search and displays the search results if there is any.
      * 
-     * The method first determines whether the user is searching by title or by pages based on the `SearchOption` enum.
+     * The method first determines whether the user is searching by title or by pages based on the SearchOption enum.
      * If the search is by title, the user is prompted to enter a partial title, and the method searches for matching
      * book titles. If the search is by pages, the user is asked to input a specific number of pages to search for.
      * The search results (book index, title, and pages) are then displayed in a formatted table, and the time taken
@@ -450,15 +450,15 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * 
      * **Drawbacks:**
      * - DITTO: If the user repeatedly enters an empty search query (for title), they are prompted again without an option to exit the loop.
-     * - The method assumes that `askUserForInt` will always receive valid numeric input when searching by pages.
+     * - The method assumes that askUserForInt will always receive valid numeric input when searching by pages.
      * 
      * **Possible Improvements:**
      * - Add an option to allow the user to cancel the search if they do not wish to continue typing "cancel" during the search.
      * - Improve input validation for the number of pages, such as handling non-integer.
      *
      * @param option The search option selected by the user (either by title or by pages).
-     * @throws InputMismatchException - This method relies on `askUserForInt` for searching by pages, which 
-     *                                 may throw an `InputMismatchException` if non-integer input is provided.
+     * @throws InputMismatchException - This method relies on askUserForInt for searching by pages, which 
+     *                                 may throw an InputMismatchException if non-integer input is provided.
      */
     private static void searchBooks(SearchOption option) {
         // Start measuring search time
@@ -521,7 +521,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }    
 
     /**
-     * The `assessAlgorithms` method evaluates the performance of different sorting and searching algorithms 
+     * The assessAlgorithms method evaluates the performance of different sorting and searching algorithms 
      * (Quick Sort, Bubble Sort, Linear Search, and Binary Search) on different data sizes. The method compares
      * the execution times of each algorithm and displays which one performs better for each scenario.
      * 
@@ -653,7 +653,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `readFile` method reads the book data from a specified file. It performs two passes over the file:
+     * The readFile method reads the book data from a specified file. It performs two passes over the file:
      * 1. The first pass counts the number of lines in the file to initialize the arrays for storing
      *    book titles and pages.
      * 2. The second pass reads the actual book data and populates the arrays with the book titles and page numbers.
@@ -665,7 +665,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * **Advantages:**
      * - Handles both reading and parsing of the file in a straightforward manner.
      * - Uses a two-pass approach, ensuring that the arrays are allocated with the correct size based on the number of lines in the file.
-     * - Catches and handles `IOException` and `NumberFormatException` to provide feedback on errors during file reading and number parsing.
+     * - Catches and handles IOException and NumberFormatException to provide feedback on errors during file reading and number parsing.
      * 
      * **Drawbacks:**
      * - The method assumes a specific file structure (titles in the first column, pages in the second), which could lead to errors if the file format differs.
@@ -679,7 +679,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * - We can consider a single-pass approach, or using different data structures to read and count lines in one go, improving efficiency.
      *
      * @param filename The name of the file to read.
-     * @throws IOException - This method catches `IOException` internally but prints stack traces for debugging.
+     * @throws IOException - This method catches IOException internally but prints stack traces for debugging.
      * @throws NumberFormatException - Catches parsing errors when reading page numbers from the file.
      */
     public static void readFile(String filename) {
@@ -726,7 +726,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }    
 
     /**
-     * The `bubbleSort` method sorts an array of book titles and their corresponding page numbers 
+     * The bubbleSort method sorts an array of book titles and their corresponding page numbers 
      * using the Bubble Sort algorithm. It sorts the titles in either ascending or descending order 
      * based on the user's input and adjusts the page numbers to stay aligned with their respective titles.
      * This algorithm is is used just in Assess Algorithms part to improve performance.
@@ -750,7 +750,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      *
      * @param titles An array of book titles to be sorted.
      * @param pages An array of corresponding page numbers, which will be adjusted in alignment with their respective titles.
-     * @param ascending A boolean indicating whether to sort in ascending order (`true`) or descending order (`false`).
+     * @param ascending A boolean indicating whether to sort in ascending order (true) or descending order (false).
      */
     public static void bubbleSort(String[] titles, int[] pages, boolean ascending) {
         int n = titles.length; // Number of titles (and pages) in the array
@@ -780,7 +780,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }    
 
     /**
-     * The `bubbleSort` method sorts an array of book page numbers and their corresponding titles using the Bubble Sort 
+     * The bubbleSort method sorts an array of book page numbers and their corresponding titles using the Bubble Sort 
      * algorithm. It sorts the page numbers in either ascending or descending order based on the user's input and adjusts 
      * the book titles to stay aligned with their respective page numbers.
      * 
@@ -805,7 +805,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      *
      * @param pages An array of book page numbers to be sorted.
      * @param titles An array of corresponding book titles, which will be adjusted in alignment with the page numbers.
-     * @param ascending A boolean indicating whether to sort in ascending order (`true`) or descending order (`false`).
+     * @param ascending A boolean indicating whether to sort in ascending order (true) or descending order (false).
      */
     public static void bubbleSort(int[] pages, String[] titles, boolean ascending) {
         int n = pages.length;
@@ -829,17 +829,17 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `quickSort` method sorts an array of book titles (and their corresponding page numbers) using the Quick Sort 
+     * The quickSort method sorts an array of book titles (and their corresponding page numbers) using the Quick Sort 
      * algorithm. It recursively partitions the array into smaller segments, sorts them based on a pivot element, and 
      * combines them to produce a fully sorted array. The sorting can be done in either ascending or descending order 
-     * depending on the `ascending` parameter.
+     * depending on the ascending parameter.
      * 
      * **Algorithm Explanation:**
      * - Quick Sort is a divide-and-conquer algorithm that selects a pivot element, partitions the array into two segments 
      *   (one with elements smaller than the pivot and the other with elements larger than the pivot), and recursively sorts 
      *   the segments.
      * 
-     * The `partitionTitles` method is responsible for partitioning the array by selecting a pivot (usually the last element) 
+     * The partitionTitles method is responsible for partitioning the array by selecting a pivot (usually the last element) 
      * and ensuring that all titles on the left of the pivot are smaller (or larger, depending on the order) than the pivot, 
      * and those on the right are greater.
      * 
@@ -860,7 +860,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * @param pages An array of corresponding page numbers, which will be adjusted in alignment with the sorted titles.
      * @param low The starting index of the segment to be sorted.
      * @param high The ending index of the segment to be sorted.
-     * @param ascending A boolean indicating whether to sort in ascending order (`true`) or descending order (`false`).
+     * @param ascending A boolean indicating whether to sort in ascending order (true) or descending order (false).
      */
     // QuickSort for Titles
     public static void quickSort(String[] titles, int[] pages, int low, int high, boolean ascending) {
@@ -877,7 +877,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `partitionTitles` method is responsible for partitioning the array based on the pivot element. It rearranges the 
+     * The partitionTitles method is responsible for partitioning the array based on the pivot element. It rearranges the 
      * elements so that all titles smaller than the pivot are placed before it, and all titles greater than the pivot are placed 
      * after it (or vice versa for descending order).
      * 
@@ -888,7 +888,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * @param pages An array of corresponding page numbers, which will be adjusted in alignment with the titles.
      * @param low The starting index of the segment to be partitioned.
      * @param high The ending index of the segment to be partitioned.
-     * @param ascending A boolean indicating whether to sort in ascending order (`true`) or descending order (`false`).
+     * @param ascending A boolean indicating whether to sort in ascending order (true) or descending order (false).
      * @return The index of the pivot element after partitioning.
      */
     public static int partitionTitles(String[] titles, int[] pages, int low, int high, boolean ascending) {
@@ -930,17 +930,17 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `quickSort` method sorts an array of book page numbers (and their corresponding titles) using the Quick Sort 
+     * The quickSort method sorts an array of book page numbers (and their corresponding titles) using the Quick Sort 
      * algorithm. It recursively partitions the array into smaller segments based on the page numbers, sorts them around 
      * a pivot element, and combines them to produce a fully sorted array. The sorting can be done in either ascending or 
-     * descending order depending on the `ascending` parameter.
+     * descending order depending on the ascending parameter.
      * 
      * **Algorithm Explanation:**
      * - DITTO: Quick Sort is a divide-and-conquer algorithm that selects a pivot element, partitions the array into two segments 
      *   (one with elements smaller than the pivot and the other with elements larger than the pivot), and recursively sorts 
      *   the segments.
      * 
-     * The `partitionPages` method is responsible for partitioning the array by selecting a pivot (usually the last element) 
+     * The partitionPages method is responsible for partitioning the array by selecting a pivot (usually the last element) 
      * and ensuring that all page numbers on the left of the pivot are smaller (or larger, depending on the order) than the 
      * pivot, and those on the right are greater.
      *
@@ -948,7 +948,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * @param titles An array of corresponding book titles, which will be adjusted in alignment with the sorted pages.
      * @param low The starting index of the segment to be sorted.
      * @param high The ending index of the segment to be sorted.
-     * @param ascending A boolean indicating whether to sort in ascending order (`true`) or descending order (`false`).
+     * @param ascending A boolean indicating whether to sort in ascending order (true) or descending order (false).
      */
     public static void quickSort(int[] pages, String[] titles, int low, int high, boolean ascending) {
         if (low < high) {
@@ -964,7 +964,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `partitionPages` method is responsible for partitioning the array based on the pivot element. It rearranges the 
+     * The partitionPages method is responsible for partitioning the array based on the pivot element. It rearranges the 
      * elements so that all page numbers smaller than the pivot are placed before it, and all page numbers greater than 
      * the pivot are placed after it (or vice versa for descending order).
      * 
@@ -975,7 +975,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
      * @param titles An array of corresponding book titles, which will be adjusted in alignment with the pages.
      * @param low The starting index of the segment to be partitioned.
      * @param high The ending index of the segment to be partitioned.
-     * @param ascending A boolean indicating whether to sort in ascending order (`true`) or descending order (`false`).
+     * @param ascending A boolean indicating whether to sort in ascending order (true) or descending order (false).
      * @return The index of the pivot element after partitioning.
      */
     public static int partitionPages(int[] pages, String[] titles, int low, int high, boolean ascending) {
@@ -1017,7 +1017,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `linearSearch` method is used for assessment and performs a linear search on an array of book titles to find an exact match 
+     * The linearSearch method is used for assessment and performs a linear search on an array of book titles to find an exact match 
      * for a specified search title. It iterates through the array sequentially, comparing each title with 
      * the search title in a case-insensitive manner.
      * 
@@ -1054,7 +1054,7 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `binarySearchTitle` method is used for assessment and performs a binary search on a sorted array of book titles to find an exact match for 
+     * The binarySearchTitle method is used for assessment and performs a binary search on a sorted array of book titles to find an exact match for 
      * a specified search title. It uses a divide-and-conquer approach, repeatedly narrowing down the search range by 
      * comparing the middle element of the range with the target title.
      * 
@@ -1102,13 +1102,13 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `partialTitleSearch` method performs a case-insensitive search for a partial match of a given title 
+     * The partialTitleSearch method performs a case-insensitive search for a partial match of a given title 
      * within an array of book titles. It checks if each book title contains the search title as a substring 
      * and returns a list of indices where matches are found.
      * 
      * **Algorithm Explanation:**
      * - The method uses a linear search to iterate through the array of titles. For each title, it checks 
-     *   if the search title is a substring of the current title using the `contains` method, while ignoring 
+     *   if the search title is a substring of the current title using the contains method, while ignoring 
      *   case differences.
      * - All matching indices are collected in a list and returned to the caller.
      * 
@@ -1144,13 +1144,13 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `partialPageSearch` method performs a search for an exact match of a given page count within an 
+     * The partialPageSearch method performs a search for an exact match of a given page count within an 
      * array of book page numbers. It iterates through the array and checks if the current page count 
-     * matches the `searchPage` parameter.
+     * matches the searchPage parameter.
      * 
      * **Algorithm Explanation:**
      * - This method uses a linear search algorithm, which checks each page number one by one to find exact 
-     *   matches for the `searchPage` parameter.
+     *   matches for the searchPage parameter.
      * - It returns a list of indices where the page numbers match the given page count.
      * 
      * **Advantages:**
@@ -1183,13 +1183,13 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `askUserForInt` method prompts the user to input an integer and handles any invalid input by 
+     * The askUserForInt method prompts the user to input an integer and handles any invalid input by 
      * repeatedly asking for a valid integer. It displays a custom message to the user, waits for input, 
      * and ensures that the input is a valid integer.
      * 
      * **Method Description:**
      * - The method continuously prompts the user for an input until a valid integer is entered. If the input 
-     *   is not a valid integer, it catches the `NumberFormatException` and prompts the user to enter a valid 
+     *   is not a valid integer, it catches the NumberFormatException and prompts the user to enter a valid 
      *   integer again.
      * 
      * **Advantages:**
@@ -1228,13 +1228,13 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }    
 
     /**
-     * The `formatAndDisplayBooks` method formats and displays a list of book titles and their corresponding 
+     * The formatAndDisplayBooks method formats and displays a list of book titles and their corresponding 
      * page counts in a tabular format. The method prints a table header, followed by up to 50 entries from 
      * the provided arrays. Each entry shows the index, book title, and page count.
      * 
      * **Method Description:**
      * - The method prints a table-like structure with columns for the index, book title, and page count.
-     * - It uses formatted printing (`printf`) to ensure consistent alignment of the data in a neat and readable way.
+     * - It uses formatted printing (printf) to ensure consistent alignment of the data in a neat and readable way.
      * - The method limits the number of displayed entries to 50 for readability, even if more entries are present.
      * 
      * **Advantages:**
@@ -1262,14 +1262,14 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `MenuOption` enum represents the possible options available in the main menu of the program. 
+     * The MenuOption enum represents the possible options available in the main menu of the program. 
      * Each option is associated with an integer value that corresponds to the user's input.
      * 
      * The enum provides four main options:
-     * 1. `SORT` - Option to sort the list of books by title or page count.
-     * 2. `SEARCH` - Option to search for books by title or page count.
-     * 3. `ASSESS_ALGORITHMS` - Option to assess and compare sorting and searching algorithms.
-     * 4. `EXIT` - Option to exit the program.
+     * 1. SORT - Option to sort the list of books by title or page count.
+     * 2. SEARCH - Option to search for books by title or page count.
+     * 3. ASSESS_ALGORITHMS - Option to assess and compare sorting and searching algorithms.
+     * 4. EXIT - Option to exit the program.
      * 
      * **Advantages:**
      * - Enums provide a type-safe way to represent and handle menu options, ensuring that only valid options 
@@ -1299,11 +1299,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
         }
     
         /**
-         * Retrieves the `MenuOption` corresponding to the given integer value. 
-         * If the value does not match any of the defined options, the method returns `null`.
+         * Retrieves the MenuOption corresponding to the given integer value. 
+         * If the value does not match any of the defined options, the method returns null.
          * 
          * @param value The integer value provided by the user.
-         * @return The corresponding `MenuOption` or `null` if the value does not match any option.
+         * @return The corresponding MenuOption or null if the value does not match any option.
          */
         public static MenuOption getValue(int value) {
             // Loop through the enum values to find a match with the provided integer
@@ -1317,14 +1317,14 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `SortingOption` enum represents the options available in the sorting menu. Each option is 
+     * The SortingOption enum represents the options available in the sorting menu. Each option is 
      * associated with an integer value corresponding to the user's input for how they would like to 
      * sort the list of books.
      * 
      * The enum provides three options:
-     * 1. `ByTITLE` - Sort the books by title.
-     * 2. `ByPAGES` - Sort the books by page count.
-     * 3. `BACK` - Return to the previous menu.
+     * 1. ByTITLE - Sort the books by title.
+     * 2. ByPAGES - Sort the books by page count.
+     * 3. BACK - Return to the previous menu.
      * 
      * @see #getValue(int) Provides a way to retrieve the enum option corresponding to a specific integer value.
      */
@@ -1341,11 +1341,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
         }
     
         /**
-         * Retrieves the `SortingOption` corresponding to the given integer value.
-         * If the value does not match any of the defined options, the method returns `null`.
+         * Retrieves the SortingOption corresponding to the given integer value.
+         * If the value does not match any of the defined options, the method returns null.
          * 
          * @param value The integer value provided by the user.
-         * @return The corresponding `SortingOption` or `null` if the value does not match any option.
+         * @return The corresponding SortingOption or null if the value does not match any option.
          */
         public static SortingOption getValue(int value) {
             // Loop through the enum values to find a match with the provided integer
@@ -1359,14 +1359,14 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `SortingOrder` enum represents the available sorting orders in the sorting menu. Each option 
+     * The SortingOrder enum represents the available sorting orders in the sorting menu. Each option 
      * is associated with an integer value corresponding to the user's input for how they would like 
      * to order the sorted list.
      * 
      * The enum provides three options:
-     * 1. `ASCENDING` - Sort the books in ascending order.
-     * 2. `DESCENDING` - Sort the books in descending order.
-     * 3. `BACK` - Return to the previous menu.
+     * 1. ASCENDING - Sort the books in ascending order.
+     * 2. DESCENDING - Sort the books in descending order.
+     * 3. BACK - Return to the previous menu.
      * 
      * @see #getValue(int) Provides a way to retrieve the enum option corresponding to a specific integer value.
      */
@@ -1383,11 +1383,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
         }
     
         /**
-         * Retrieves the `SortingOrder` corresponding to the given integer value.
-         * If the value does not match any of the defined options, the method returns `null`.
+         * Retrieves the SortingOrder corresponding to the given integer value.
+         * If the value does not match any of the defined options, the method returns null.
          * 
          * @param value The integer value provided by the user.
-         * @return The corresponding `SortingOrder` or `null` if the value does not match any option.
+         * @return The corresponding SortingOrder or null if the value does not match any option.
          */
         public static SortingOrder getValue(int value) {
             // Loop through the enum values to find a match with the provided integer
@@ -1401,14 +1401,14 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
     }
 
     /**
-     * The `SearchOption` enum represents the available options for searching within the search menu.
+     * The SearchOption enum represents the available options for searching within the search menu.
      * Each option is associated with an integer value corresponding to the user's input for how they 
      * would like to search the list of books.
      * 
      * The enum provides three options:
-     * 1. `ByTITLE` - Search the books by title.
-     * 2. `ByPAGES` - Search the books by the number of pages.
-     * 3. `BACK` - Return to the previous menu.
+     * 1. ByTITLE - Search the books by title.
+     * 2. ByPAGES - Search the books by the number of pages.
+     * 3. BACK - Return to the previous menu.
      * 
      * @see #getValue(int) Provides a way to retrieve the enum option corresponding to a specific integer value.
      */
@@ -1425,11 +1425,11 @@ public class JOEL_TOLA_SOLIZ_CA_1 {
         }
     
         /**
-         * Retrieves the `SearchOption` corresponding to the given integer value.
-         * If the value does not match any of the defined options, the method returns `null`.
+         * Retrieves the SearchOption corresponding to the given integer value.
+         * If the value does not match any of the defined options, the method returns null.
          * 
          * @param value The integer value provided by the user.
-         * @return The corresponding `SearchOption` or `null` if the value does not match any option.
+         * @return The corresponding SearchOption or null if the value does not match any option.
          */
         public static SearchOption getValue(int value) {
             // Loop through the enum values to find a match with the provided integer
