@@ -1,4 +1,4 @@
-package CA_2;
+package CA_2_Joel;
 
 public class Cardiology extends Department {
     public Cardiology() {

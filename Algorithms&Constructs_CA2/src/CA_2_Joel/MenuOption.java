@@ -1,4 +1,4 @@
-package CA_2;
+package CA_2_Joel;
 
 // Define the enum for menu options
 public enum MenuOption {

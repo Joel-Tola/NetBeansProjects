@@ -1,4 +1,4 @@
-package CA_2;
+package CA_2_Joel;
 
 public class Nurse extends Employee {
     public Nurse(String name, Department department) {

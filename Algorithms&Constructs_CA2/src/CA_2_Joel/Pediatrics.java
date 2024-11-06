@@ -1,4 +1,4 @@
-package CA_2;
+package CA_2_Joel;
 
 public class Pediatrics extends Department {
     public Pediatrics() {
