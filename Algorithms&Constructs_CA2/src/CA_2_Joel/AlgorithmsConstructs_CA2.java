@@ -120,19 +120,7 @@ public class AlgorithmsConstructs_CA2 {
         } while (selectOption != MenuOption.EXIT);
         myScan.close();
     }
-
-    private static void printEmployeeDetails(Employee newEmployee) {
-        // Define the format string
-        String format = "| %-20s | %-25s | %-20s |\n";
-        System.out.println("----------------------------------------------------------------------------------------");
-        System.out.printf(format, "Name", "Role", "Department");
-        System.out.println("----------------------------------------------------------------------------------------");
-        String departmentName = (newEmployee.getDepartment() != null) ? newEmployee.getDepartment().getDeptName()
-                : "No Department";
-        System.out.printf(format, newEmployee.getName(), newEmployee.getRole(), departmentName);
-        System.out.println("----------------------------------------------------------------------------------------");
-    }
-
+ 
     private static void generateRandomEmployee() {
         // Generate a random employee
         String[] names = { "Alice", "Bob", "Charlie", "Diana", "Edward" };
@@ -429,11 +417,7 @@ public class AlgorithmsConstructs_CA2 {
         Department department = null;
 
         do {
-            System.out.println("\nPlease select a Department:");
-            for (DepartmentType dept : DepartmentType.values()) {
-                System.out.println(dept.value + ": " + dept.stringValue);
-            }
-            System.out.print("Option: ");
+            displayDepartmentTypeMenu();
 
             while (!myScan.hasNextInt()) {
                 System.out.println("Please select integers only from the options");
@@ -536,39 +520,47 @@ public class AlgorithmsConstructs_CA2 {
         System.out.println("----------------------------------------------------------------------------------------");
     }
 
-    private static void displayMenu() {
+    private static void printEmployeeDetails(Employee newEmployee) {
+        // Define the format string
+        String format = "| %-20s | %-25s | %-20s |\n";
+        System.out.println("----------------------------------------------------------------------------------------");
+        System.out.printf(format, "Name", "Role", "Department");
+        System.out.println("----------------------------------------------------------------------------------------");
+        String departmentName = (newEmployee.getDepartment() != null) ? newEmployee.getDepartment().getDeptName()
+                : "No Department";
+        System.out.printf(format, newEmployee.getName(), newEmployee.getRole(), departmentName);
+        System.out.println("----------------------------------------------------------------------------------------");
+    }
+
+    private static void displayMenuOptions(MenuOptionInterface[] options) {
         String format = "| %-2d: %-35s |\n";
         System.out.println("\nPlease select an option:");
         System.out.println("---------------------------------------------------");
-        for (MenuOption option : MenuOption.values()) {
-            System.out.printf(format, option.value, option.stringValue);
+        for (MenuOptionInterface option : options) {
+            System.out.printf(format, option.getValue(), option.getStringValue());
         }
         System.out.println("---------------------------------------------------");
         System.out.print("Option: ");
     }
 
+    private static void displayMenu() {
+        displayMenuOptions(MenuOption.values());
+    }
+
     private static void displayEmployeeCategoryMenu() {
-        System.out.println("\nIs the employee a Manager or Staff?");
-        for (EmployeeCategory option : EmployeeCategory.values()) {
-            System.out.println(option.value + ": " + option.stringValue);
-        }
-        System.out.print("Option: ");
+        displayMenuOptions(EmployeeCategory.values());
     }
 
     private static void displayEmployeeTypeMenu() {
-        System.out.println("\nPlease select an Employee Type (number) from the following:");
-        for (EmployeeType option : EmployeeType.values()) {
-            System.out.println(option.value + ": " + option.stringValue);
-        }
-        System.out.print("Option: ");
+        displayMenuOptions(EmployeeType.values());
     }
 
     private static void displayManagerTypeMenu() {
-        System.out.println("\nPlease select a Manager Type (number) from the following:");
-        for (ManagerType option : ManagerType.values()) {
-            System.out.println(option.value + ": " + option.stringValue);
-        }
-        System.out.print("Option: ");
+        displayMenuOptions(ManagerType.values());
+    }
+
+    private static void displayDepartmentTypeMenu(){
+        displayMenuOptions(DepartmentType.values());
     }
 
     // Department class
@@ -706,21 +698,26 @@ public class AlgorithmsConstructs_CA2 {
     }
 
     // Enums as per the provided code
-    enum MenuOption {
+    public interface MenuOptionInterface {
+        int getValue();
+        String getStringValue();
+    }
+    
+    enum MenuOption implements MenuOptionInterface {
         SORT(1, "Sorting"),
         SEARCH(2, "Searching"),
         ADD_EMPLOYEE(3, "Add Employee"),
         GENERATE_RANDOM_EMPLOYEE(4, "Generate Random Employee"),
         EXIT(5, "Exit");
-
-        public final int value;
-        public final String stringValue;
-
+    
+        private final int value;
+        private final String stringValue;
+    
         MenuOption(int value, String stringValue) {
             this.value = value;
             this.stringValue = stringValue;
         }
-
+    
         public static MenuOption getValue(int value) {
             for (MenuOption option : values()) {
                 if (option.value == value) {
@@ -729,21 +726,31 @@ public class AlgorithmsConstructs_CA2 {
             }
             return null;
         }
-    }
+    
+        @Override
+        public int getValue() {
+            return value;
+        }
+    
+        @Override
+        public String getStringValue() {
+            return stringValue;
+        }
+    }    
 
-    enum EmployeeCategory {
+    enum EmployeeCategory implements MenuOptionInterface {
         MANAGER(1, "Manager"),
         STAFF(2, "Staff"),
         BACK(3, "Back");
-
-        public final int value;
-        public final String stringValue;
-
+    
+        private final int value;
+        private final String stringValue;
+    
         EmployeeCategory(int value, String stringValue) {
             this.value = value;
             this.stringValue = stringValue;
         }
-
+    
         public static EmployeeCategory getValue(int value) {
             for (EmployeeCategory option : values()) {
                 if (option.value == value) {
@@ -752,9 +759,19 @@ public class AlgorithmsConstructs_CA2 {
             }
             return null;
         }
+    
+        @Override
+        public int getValue() {
+            return value;
+        }
+    
+        @Override
+        public String getStringValue() {
+            return stringValue;
+        }
     }
 
-    enum ManagerType {
+    enum ManagerType implements MenuOptionInterface{
         NURSING_MANAGER(1, "Nursing Manager"),
         CHIEF_MEDICAL_OFFICER(2, "Chief Medical Officer"),
         ADMINISTRATIVE_MANAGER(3, "Administrative Manager"),
@@ -776,9 +793,19 @@ public class AlgorithmsConstructs_CA2 {
             }
             return null;
         }
+
+        @Override
+        public int getValue() {
+            return value;
+        }
+    
+        @Override
+        public String getStringValue() {
+            return stringValue;
+        }
     }
 
-    enum EmployeeType {
+    enum EmployeeType implements MenuOptionInterface{
         DOCTOR(1, "Doctor"),
         NURSE(2, "Nurse"),
         ADMINISTRATIVE_STAFF(3, "Administrative Staff"),
@@ -800,9 +827,19 @@ public class AlgorithmsConstructs_CA2 {
             }
             return null;
         }
+
+        @Override
+        public int getValue() {
+            return value;
+        }
+    
+        @Override
+        public String getStringValue() {
+            return stringValue;
+        }
     }
 
-    enum DepartmentType {
+    enum DepartmentType implements MenuOptionInterface{
         EMERGENCY(1, "Emergency"),
         PEDIATRICS(2, "Pediatrics"),
         CARDIOLOGY(3, "Cardiology"),
@@ -823,6 +860,16 @@ public class AlgorithmsConstructs_CA2 {
                 }
             }
             return null;
+        }
+
+        @Override
+        public int getValue() {
+            return value;
+        }
+    
+        @Override
+        public String getStringValue() {
+            return stringValue;
         }
     }
 }
