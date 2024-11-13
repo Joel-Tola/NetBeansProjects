@@ -34,32 +34,35 @@ public class AlgorithmsConstructs_CA2 {
             while ((line = buffReader.readLine()) != null) {
                 String[] lineData = line.split(",");
 
-                // Assuming the file contains name and role
+                // Assuming the file contains name and role and department
                 String name = lineData[0];
-                String role = lineData.length > 1 ? lineData[1] : null;
+                String role = lineData.length > 1 ? lineData[1].trim() : "noRole";
+                String deptName = lineData.length > 2 ? lineData[2].trim() : null;
+                Department department = createDepartmentFromName(deptName);
                 Employee newEmployee;
 
                 switch (role) {
                     case "Doctor":
-                        newEmployee = new Doctor(name, null);
+                        newEmployee = new Doctor(name, department);
                         break;
                     case "Nurse":
-                        newEmployee = new Nurse(name, null);
+                        newEmployee = new Nurse(name, department);
                         break;
                     case "Administrative Staff":
-                        newEmployee = new AdministrativeStaff(name, null);
+                        newEmployee = new AdministrativeStaff(name, department);
                         break;
                     case "Nursing Manager":
-                        newEmployee = new NursingManager(name, null);
+                        newEmployee = new NursingManager(name, department);
                         break;
                     case "Chief Medical Officer":
-                        newEmployee = new ChiefMedicalOfficer(name, null);
+                        newEmployee = new ChiefMedicalOfficer(name, department);
                         break;
                     case "Administrative Manager":
-                        newEmployee = new AdministrativeManager(name, null);
+                        newEmployee = new AdministrativeManager(name, department);
                         break;
                     default:
-                        newEmployee = new Doctor(name, null); // Default to Doctor
+                        newEmployee = new Employee(name, null);
+                        ; // Default to Employee
                         break;
                 }
                 employees.add(newEmployee);
@@ -69,11 +72,10 @@ public class AlgorithmsConstructs_CA2 {
         }
 
         // Print employees list
-        for (Employee employee : employees) {
-            System.out.println(employee.getName() + " | Role: " + employee.getRole());
-        }
+        printAllEmployees();
 
-        int intOption = 0;
+        MenuOption selectOption = null;
+
         do {
             displayMenu();
 
@@ -85,13 +87,11 @@ public class AlgorithmsConstructs_CA2 {
 
             int option = myScan.nextInt();
             myScan.nextLine();
-            MenuOption selectOption = MenuOption.getValue(option);
+            selectOption = MenuOption.getValue(option);
 
             if (selectOption == null) {
                 System.out.println("Please select from all the available options");
             } else {
-                intOption = option;
-
                 switch (selectOption) {
                     case SORT:
                         System.out.println("SORT SELECTED");
@@ -117,13 +117,25 @@ public class AlgorithmsConstructs_CA2 {
                         System.out.println("That option does not exist. Please try again.");
                 }
             }
-        } while (intOption != 5);
+        } while (selectOption != MenuOption.EXIT);
         myScan.close();
+    }
+
+    private static void printEmployeeDetails(Employee newEmployee) {
+        // Define the format string
+        String format = "| %-20s | %-25s | %-20s |\n";
+        System.out.println("----------------------------------------------------------------------------------------");
+        System.out.printf(format, "Name", "Role", "Department");
+        System.out.println("----------------------------------------------------------------------------------------");
+        String departmentName = (newEmployee.getDepartment() != null) ? newEmployee.getDepartment().getDeptName()
+                : "No Department";
+        System.out.printf(format, newEmployee.getName(), newEmployee.getRole(), departmentName);
+        System.out.println("----------------------------------------------------------------------------------------");
     }
 
     private static void generateRandomEmployee() {
         // Generate a random employee
-        String[] names = {"Alice", "Bob", "Charlie", "Diana", "Edward"};
+        String[] names = { "Alice", "Bob", "Charlie", "Diana", "Edward" };
         Random random = new Random();
         String name = names[random.nextInt(names.length)];
 
@@ -133,16 +145,34 @@ public class AlgorithmsConstructs_CA2 {
         if (roleType == 0) {
             EmployeeType[] employeeTypes = EmployeeType.values();
             EmployeeType employeeType = employeeTypes[random.nextInt(employeeTypes.length - 1)]; // Exclude BACK
-            newEmployee = createEmployee(name, employeeType, null);
+            Department department = selectRandomDepartment();
+            newEmployee = createEmployee(name, employeeType, department);
         } else {
             ManagerType[] managerTypes = ManagerType.values();
             ManagerType managerType = managerTypes[random.nextInt(managerTypes.length - 1)]; // Exclude BACK
-            newEmployee = createManager(name, managerType, null);
+            Department department = selectRandomDepartment();
+            newEmployee = createManager(name, managerType, department);
         }
 
         employees.add(newEmployee);
         System.out.println("Random employee generated and added:");
-        System.out.println(newEmployee.getName() + " | Role: " + newEmployee.getRole());
+        printEmployeeDetails(newEmployee);
+    }
+
+    private static Department selectRandomDepartment() {
+        Random random = new Random();
+        int index = random.nextInt(DepartmentType.values().length - 1); // Exclude BACK
+        DepartmentType selectedDept = DepartmentType.values()[index];
+        switch (selectedDept) {
+            case CARDIOLOGY:
+                return new Cardiology();
+            case EMERGENCY:
+                return new Emergency();
+            case PEDIATRICS:
+                return new Pediatrics();
+            default:
+                return null;
+        }
     }
 
     private static void sortEmployees() {
@@ -206,10 +236,23 @@ public class AlgorithmsConstructs_CA2 {
         // Perform binary search
         int index = binarySearch(employees, searchName);
         if (index != -1) {
+            // Define the format string for consistent column widths
+            String format = "| %-20s | %-25s | %-20s |\n";
             Employee foundEmployee = employees.get(index);
-            System.out.println("Employee found: " + foundEmployee.getName() + " | Role: " +
-                foundEmployee.getRole() + " | Department: " +
-                (foundEmployee.getDepartment() != null ? foundEmployee.getDepartment().getDeptName() : "No Department"));
+            System.out.println("\nEmployee found:");
+            System.out.println(
+                    "----------------------------------------------------------------------------------------");
+            System.out.printf(format, "Name", "Role", "Department");
+            System.out.println(
+                    "----------------------------------------------------------------------------------------");
+            String name = foundEmployee.getName();
+            String role = foundEmployee.getRole();
+            String departmentName = (foundEmployee.getDepartment() != null)
+                    ? foundEmployee.getDepartment().getDeptName()
+                    : "No Department";
+            System.out.printf(format, name, role, departmentName);
+            System.out.println(
+                    "----------------------------------------------------------------------------------------");
         } else {
             System.out.println("Employee with name '" + searchName + "' not found.");
         }
@@ -237,18 +280,21 @@ public class AlgorithmsConstructs_CA2 {
     }
 
     private static void addEmployeeMenu(Scanner myScan) {
-
         // Asking for Employee Name
         boolean isValidName = false;
         String name = "";
 
         do {
             System.out.println("Please insert employee Name: ");
-
             String input = myScan.nextLine();
 
             // Validating input contains no numbers and is not empty
             if (!input.matches(".*\\d.*") && !input.isEmpty()) {
+                if (employeeExistsByName(input)) {
+                    System.out
+                            .println("An employee with the name '" + input + "' already exists. Duplication avoided.");
+                    return; // Stop further input and return to the main menu
+                }
                 isValidName = true;
                 name = input;
             } else {
@@ -256,34 +302,48 @@ public class AlgorithmsConstructs_CA2 {
             }
         } while (!isValidName);
 
-        int option = 0;
+        EmployeeCategory selectOption = null;
         do {
-            System.out.println("\nIs the employee a Manager or Staff?");
-            System.out.println("1: Manager");
-            System.out.println("2: Staff");
-            System.out.println("3: Back");
-            System.out.print("Option: ");
+            displayEmployeeCategoryMenu();
 
             while (!myScan.hasNextInt()) {
                 System.out.println("Please select integers only from the options");
                 myScan.next();
             }
 
-            option = myScan.nextInt();
+            int option = myScan.nextInt();
             myScan.nextLine();
 
-            if (option == 1) {
-                addManager(name, myScan);
-                break;
-            } else if (option == 2) {
-                addStaff(name, myScan);
-                break;
-            } else if (option == 3) {
-                break;
+            selectOption = EmployeeCategory.getValue(option);
+
+            if (selectOption == null) {
+                System.out.println("Please select from all the available options");
             } else {
-                System.out.println("Please select a valid option.");
+                switch (selectOption) {
+                    case MANAGER:
+                        addManager(name, myScan);
+                        break;
+                    case STAFF:
+                        addStaff(name, myScan);
+                        break;
+                    case BACK:
+                        break;
+                    default:
+                        System.out.println("Please select a valid option.");
+                        break;
+                }
+                break; // Exit the loop after processing the selection
             }
-        } while (option != 3);
+        } while (selectOption != EmployeeCategory.BACK);
+    }
+
+    private static boolean employeeExistsByName(String name) {
+        for (Employee employee : employees) {
+            if (employee.getName().equalsIgnoreCase(name)) {
+                return true; // Employee with the same name exists
+            }
+        }
+        return false; // No duplicate found
     }
 
     private static void addStaff(String name, Scanner myScan) {
@@ -305,9 +365,20 @@ public class AlgorithmsConstructs_CA2 {
             } else if (selectOption == EmployeeType.BACK) {
                 break;
             } else {
-                Employee newEmployee = createEmployee(name, selectOption, null);
-                employees.add(newEmployee);
-                System.out.println("Employee added successfully.");
+                // Select Department
+                Department department = selectDepartment(myScan);
+                if (department == null) {
+                    System.out.println("Department selection canceled.");
+                    break;
+                }
+
+                Employee newEmployee = createEmployee(name, selectOption, department);
+                if (newEmployee != null) {
+                    employees.add(newEmployee);
+                    System.out.println("Employee added successfully.");
+                    // Print the added employee's details
+                    printEmployeeDetails(newEmployee);
+                }
                 break;
             }
         } while (option != 4);
@@ -321,6 +392,7 @@ public class AlgorithmsConstructs_CA2 {
             while (!myScan.hasNextInt()) {
                 System.out.println("Please select integers only from the options");
                 myScan.next();
+                break;
             }
 
             option = myScan.nextInt();
@@ -329,15 +401,92 @@ public class AlgorithmsConstructs_CA2 {
 
             if (selectOption == null) {
                 System.out.println("Please select from all the available options");
+                break;
             } else if (selectOption == ManagerType.BACK) {
                 break;
             } else {
-                Manager newManager = createManager(name, selectOption, null);
-                employees.add(newManager);
-                System.out.println("Manager added successfully.");
+                // Select Department
+                Department department = selectDepartment(myScan);
+                if (department == null) {
+                    System.out.println("Department selection canceled.");
+                    break;
+                }
+
+                Manager newManager = createManager(name, selectOption, department);
+                if (newManager != null) {
+                    employees.add(newManager);
+                    System.out.println("Manager added successfully.");
+                    // Print the added manager's details
+                    printEmployeeDetails(newManager);
+                }
                 break;
             }
         } while (option != 4);
+    }
+
+    private static Department selectDepartment(Scanner myScan) {
+        DepartmentType selectedDept;
+        Department department = null;
+
+        do {
+            System.out.println("\nPlease select a Department:");
+            for (DepartmentType dept : DepartmentType.values()) {
+                System.out.println(dept.value + ": " + dept.stringValue);
+            }
+            System.out.print("Option: ");
+
+            while (!myScan.hasNextInt()) {
+                System.out.println("Please select integers only from the options");
+                myScan.next();
+            }
+
+            int option = myScan.nextInt();
+            myScan.nextLine();
+
+            selectedDept = DepartmentType.getValue(option);
+
+            if (selectedDept == null) {
+                System.out.println("Please select a valid option.");
+                break;
+            }
+            
+            switch (selectedDept) {
+                case CARDIOLOGY:
+                    department = new Cardiology();
+                    break;
+                case EMERGENCY:
+                    department = new Emergency();
+                    break;
+                case PEDIATRICS:
+                    department = new Pediatrics();
+                    break;
+                case BACK:
+                    return null; // User chose to go back
+                default:
+                    System.out.println("Please select a valid option.");
+                    break;
+            }
+
+        } while (selectedDept == null);
+
+        return department;
+    }
+
+    private static Department createDepartmentFromName(String deptName) {
+        if (deptName == null || deptName.isEmpty()) {
+            return null;
+        }
+        switch (deptName.toLowerCase()) {
+            case "cardiology":
+                return new Cardiology();
+            case "emergency":
+                return new Emergency();
+            case "pediatrics":
+                return new Pediatrics();
+            default:
+                // Handle unknown departments if necessary
+                return new Department(deptName);
+        }
     }
 
     private static Employee createEmployee(String name, EmployeeType employeeType, Department department) {
@@ -367,16 +516,40 @@ public class AlgorithmsConstructs_CA2 {
     }
 
     private static void printAllEmployees() {
+        // Define the format string for consistent column widths
+        String format = "| %-20s | %-25s | %-20s |\n";
+
+        // Print the header
+        System.out.println("----------------------------------------------------------------------------------------");
+        System.out.printf(format, "Name", "Role", "Department");
+        System.out.println("----------------------------------------------------------------------------------------");
+
+        // Print each employee's details
         for (Employee employee : employees) {
+            String name = employee.getName();
             String role = employee.getRole();
-            String departmentName = (employee.getDepartment() != null) ? employee.getDepartment().getDeptName() : "No Department";
-            System.out.println(employee.getName() + " | Role: " + role + " | Department: " + departmentName);
+            String departmentName = (employee.getDepartment() != null) ? employee.getDepartment().getDeptName()
+                    : "No Department";
+            System.out.printf(format, name, role, departmentName);
         }
+        // Print the footer
+        System.out.println("----------------------------------------------------------------------------------------");
     }
 
     private static void displayMenu() {
-        System.out.println("\nPlease select an option (number) from the following:");
+        String format = "| %-2d: %-35s |\n";
+        System.out.println("\nPlease select an option:");
+        System.out.println("---------------------------------------------------");
         for (MenuOption option : MenuOption.values()) {
+            System.out.printf(format, option.value, option.stringValue);
+        }
+        System.out.println("---------------------------------------------------");
+        System.out.print("Option: ");
+    }
+
+    private static void displayEmployeeCategoryMenu() {
+        System.out.println("\nIs the employee a Manager or Staff?");
+        for (EmployeeCategory option : EmployeeCategory.values()) {
             System.out.println(option.value + ": " + option.stringValue);
         }
         System.out.print("Option: ");
@@ -411,17 +584,38 @@ public class AlgorithmsConstructs_CA2 {
         }
     }
 
+    public static class Cardiology extends Department {
+        public Cardiology() {
+            super("Cardiology");
+        }
+    }
+
+    public static class Emergency extends Department {
+        public Emergency() {
+            super("Emergency");
+        }
+    }
+
+    public static class Pediatrics extends Department {
+        public Pediatrics() {
+            super("Pediatrics");
+        }
+    }
+
     // Employee and Manager classes and their subclasses
-    public static abstract class Employee {
+    public static class Employee {
         protected String name;
         protected Department department;
+        protected String role;
 
         public Employee(String name, Department department) {
             this.name = name;
             this.department = department;
         }
 
-        public abstract String getRole();
+        public String getRole() {
+            return "No Role";
+        };
 
         public String getName() {
             return name;
@@ -537,6 +731,29 @@ public class AlgorithmsConstructs_CA2 {
         }
     }
 
+    enum EmployeeCategory {
+        MANAGER(1, "Manager"),
+        STAFF(2, "Staff"),
+        BACK(3, "Back");
+
+        public final int value;
+        public final String stringValue;
+
+        EmployeeCategory(int value, String stringValue) {
+            this.value = value;
+            this.stringValue = stringValue;
+        }
+
+        public static EmployeeCategory getValue(int value) {
+            for (EmployeeCategory option : values()) {
+                if (option.value == value) {
+                    return option;
+                }
+            }
+            return null;
+        }
+    }
+
     enum ManagerType {
         NURSING_MANAGER(1, "Nursing Manager"),
         CHIEF_MEDICAL_OFFICER(2, "Chief Medical Officer"),
@@ -577,6 +794,30 @@ public class AlgorithmsConstructs_CA2 {
 
         public static EmployeeType getValue(int value) {
             for (EmployeeType option : values()) {
+                if (option.value == value) {
+                    return option;
+                }
+            }
+            return null;
+        }
+    }
+
+    enum DepartmentType {
+        EMERGENCY(1, "Emergency"),
+        PEDIATRICS(2, "Pediatrics"),
+        CARDIOLOGY(3, "Cardiology"),
+        BACK(4, "Back");
+
+        private final int value;
+        private final String stringValue;
+
+        DepartmentType(int value, String stringValue) {
+            this.value = value;
+            this.stringValue = stringValue;
+        }
+
+        public static DepartmentType getValue(int value) {
+            for (DepartmentType option : values()) {
                 if (option.value == value) {
                     return option;
                 }
