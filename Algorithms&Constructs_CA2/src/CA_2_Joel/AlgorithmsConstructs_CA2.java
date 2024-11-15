@@ -15,12 +15,106 @@ public class AlgorithmsConstructs_CA2 {
     public static void main(String[] args) {
 
         Scanner myScan = new Scanner(System.in);
+        employees = new ArrayList<>();
+
+        MenuOption selectOption = null;
+
+        do {
+            displayMenu();
+
+            // Process user input
+            while (!myScan.hasNextInt()) {
+                System.out.println("Please select integers only from the menu Options");
+                myScan.next();
+            }
+
+            int option = myScan.nextInt();
+            myScan.nextLine();
+            selectOption = MenuOption.getValue(option);
+
+            if (selectOption == null) {
+                System.out.println("Please select from all the available options");
+            } else {
+                switch (selectOption) {
+                    case ADD_EMPLOYEE:
+                        System.out.println("ADD_EMPLOYEE SELECTED");
+                        addEmployeeMenu(myScan);
+                        break;
+                    case GENERATE_RANDOM_EMPLOYEE:
+                        System.out.println("GENERATE_RANDOM_EMPLOYEE SELECTED");
+                        generateRandomEmployeeMenu(myScan);
+                        break;
+                    case SORT:
+                        System.out.println("SORT SELECTED");
+                        sortEmployees();
+                        printEmployeesList(employees, myScan);
+                        break;
+                    case SEARCH:
+                        System.out.println("SEARCH SELECTED");
+                        searchEmployee(myScan);
+                        break;
+                    case EDIT_EMPLOYEE:
+                        editEmployee(myScan);
+                    case EXIT:
+                        System.out.println("You have exited the program!");
+                        break;
+                    default:
+                        System.out.println("That option does not exist. Please try again.");
+                }
+            }
+        } while (selectOption != MenuOption.EXIT);
+        myScan.close();
+    }
+
+    private static void generateRandomEmployeeMenu(Scanner myScan) {
+        GenerateEmployeeOption selectOption = null;
+        do {
+            displayGenerateEmployeeMenu();
+
+            while (!myScan.hasNextInt()) {
+                System.out.println("Please select integers only from the options");
+                myScan.next();
+            }
+
+            int option = myScan.nextInt();
+            myScan.nextLine();
+
+            selectOption = GenerateEmployeeOption.getValue(option);
+
+            if (selectOption == null) {
+                System.out.println("Please select from all the available options");
+            } else {
+                switch (selectOption) {
+                    case BY_FILE:
+                        generateRandomEmployeeByFileName(myScan);
+                        break;
+                    case BY_API:
+                        generateRandomEmployeeByAPI(myScan);
+                        break;
+                    case BACK:
+                        break;
+                    default:
+                        System.out.println("Please select a valid option.");
+                        break;
+                }
+                break; // Exit the loop after processing the selection
+            }
+        } while (selectOption != GenerateEmployeeOption.BACK);
+    }
+
+    private static void generateRandomEmployeeByFileName(Scanner myScan) {
         boolean fileLoaded = false;
-        String filePath = "Applicants_Form.txt";
+        String filePath = "";
 
         while (!fileLoaded) {
-            System.out.println("Please enter the filename to read:");
-            filePath = myScan.nextLine();
+            System.out.println("Please enter the filename to read, or press q to quit:");
+            String userInput = myScan.nextLine();
+            if (userInput.equalsIgnoreCase("q")) {
+                return;
+            }
+
+            filePath = userInput;
+
             try (BufferedReader buffReader = new BufferedReader(new FileReader(filePath))) {
                 System.out.println("File read successfully!");
                 fileLoaded = true;
@@ -30,8 +124,6 @@ public class AlgorithmsConstructs_CA2 {
                 System.out.println("An error occurred while reading the file: " + e.getMessage());
             }
         }
-
-        employees = new ArrayList<>();
 
         // Read file and fill employees list
         try (BufferedReader buffReader = new BufferedReader(new FileReader(filePath))) {
@@ -75,72 +167,25 @@ public class AlgorithmsConstructs_CA2 {
         } catch (IOException e) {
             System.out.println("An error occurred while reading the data: " + e.getMessage());
         }
+    }
 
-        // Print employees list
-        printEmployeesList(employees, myScan);
-
-        MenuOption selectOption = null;
-
-        do {
-            displayMenu();
-
-            // Process user input
-            while (!myScan.hasNextInt()) {
-                System.out.println("Please select integers only from the menu Options");
-                myScan.next();
-            }
-
-            int option = myScan.nextInt();
-            myScan.nextLine();
-            selectOption = MenuOption.getValue(option);
-
-            if (selectOption == null) {
-                System.out.println("Please select from all the available options");
-            } else {
-                switch (selectOption) {
-                    case SORT:
-                        System.out.println("SORT SELECTED");
-                        sortEmployees();
-                        printEmployeesList(employees, myScan);
-                        break;
-                    case SEARCH:
-                        System.out.println("SEARCH SELECTED");
-                        searchEmployee(myScan);
-                        break;
-                    case ADD_EMPLOYEE:
-                        System.out.println("ADD_EMPLOYEE SELECTED");
-                        addEmployeeMenu(myScan);
-                        break;
-                    case GENERATE_RANDOM_EMPLOYEE:
-                        System.out.println("GENERATE_RANDOM_EMPLOYEE SELECTED");
-                        System.out.print("Enter the number of random employees to generate: ");
-                        int numEmployees = 0;
-                        while (numEmployees <= 0 || numEmployees > 5000) {
-                            if (myScan.hasNextInt()) {
-                                numEmployees = myScan.nextInt();
-                                myScan.nextLine(); // Consume newline
-                                if (numEmployees <= 0) {
-                                    System.out.print("Please enter a positive integer: ");
-                                }
-                            } else {
-                                System.out.print("Invalid input. Please enter a positive integer.");
-                                System.out.print("Please enter a positive integer between 1 - 5000");
-                                myScan.next(); // Consume invalid input
-                            }
-                        }
-                        generateRandomEmployees(numEmployees, myScan);
-                        break;
-                    case EDIT_EMPLOYEE_:
-                        editEmployee(myScan);
-                    case EXIT:
-                        System.out.println("You have exited the program!");
-                        break;
-                    default:
-                        System.out.println("That option does not exist. Please try again.");
+    private static void generateRandomEmployeeByAPI(Scanner myScan) {
+        System.out.print("Enter the number of random employees to generate: ");
+        int numEmployees = 0;
+        while (numEmployees <= 0 || numEmployees > 5000) {
+            if (myScan.hasNextInt()) {
+                numEmployees = myScan.nextInt();
+                myScan.nextLine(); // Consume newline
+                if (numEmployees <= 0) {
+                    System.out.print("Please enter a positive integer: ");
                 }
+            } else {
+                System.out.print("Invalid input. Please enter a positive integer.");
+                System.out.print("Please enter a positive integer between 1 - 5000");
+                myScan.next(); // Consume invalid input
             }
-        } while (selectOption != MenuOption.EXIT);
-        myScan.close();
+        }
+        generateRandomEmployees(numEmployees, myScan);
     }
 
     private static void generateRandomEmployees(int count, Scanner myScan) {
@@ -306,6 +351,11 @@ public class AlgorithmsConstructs_CA2 {
     }
 
     private static void searchEmployee(Scanner myScan) {
+        if (employees == null || employees.size() <= 1) {
+            System.out.println("Employee list is empty or has only one employee.");
+            return;
+        }
+        
         System.out.print("Enter the name of the employee to search: ");
         String searchName = myScan.nextLine().trim();
 
@@ -819,6 +869,10 @@ public class AlgorithmsConstructs_CA2 {
         displayMenuOptions(DepartmentType.values());
     }
 
+    private static void displayGenerateEmployeeMenu() {
+        displayMenuOptions(GenerateEmployeeOption.values());
+    }
+
     // Department class
     public static class Department {
         private String deptName;
@@ -970,11 +1024,11 @@ public class AlgorithmsConstructs_CA2 {
     }
 
     enum MenuOption implements MenuOptionInterface {
-        SORT(1, "Sorting"),
-        SEARCH(2, "Searching"),
-        ADD_EMPLOYEE(3, "Add Employee"),
-        GENERATE_RANDOM_EMPLOYEE(4, "Generate Random Employee"),
-        EDIT_EMPLOYEE_(5, "Edit Existing Employee"),
+        ADD_EMPLOYEE(1, "Add Employee"),
+        GENERATE_RANDOM_EMPLOYEE(2, "Generate Random Employees"),
+        SORT(3, "Sorting"),
+        SEARCH(4, "Searching"),
+        EDIT_EMPLOYEE(5, "Edit Existing Employee"),
         EXIT(6, "Exit");
 
         private final int value;
@@ -1156,6 +1210,39 @@ public class AlgorithmsConstructs_CA2 {
     
         public static EditOption getValue(int value) {
             for (EditOption option : values()) {
+                if (option.value == value) {
+                    return option;
+                }
+            }
+            return null;
+        }
+    
+        @Override
+        public int getValue() {
+            return value;
+        }
+    
+        @Override
+        public String getStringValue() {
+            return stringValue;
+        }
+    }
+
+    enum GenerateEmployeeOption implements MenuOptionInterface {
+        BY_FILE(1, "By Text File"),
+        BY_API(2, "By API"),
+        BACK(3, "Back");
+    
+        private final int value;
+        private final String stringValue;
+    
+        GenerateEmployeeOption(int value, String stringValue) {
+            this.value = value;
+            this.stringValue = stringValue;
+        }
+    
+        public static GenerateEmployeeOption getValue(int value) {
+            for (GenerateEmployeeOption option : values()) {
                 if (option.value == value) {
                     return option;
                 }
