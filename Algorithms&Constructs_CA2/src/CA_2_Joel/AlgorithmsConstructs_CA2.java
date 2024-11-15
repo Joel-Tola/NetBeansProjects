@@ -2,6 +2,11 @@ package CA_2_Joel;
 
 import java.util.*;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.*;
 
 public class AlgorithmsConstructs_CA2 {
 
@@ -72,7 +77,7 @@ public class AlgorithmsConstructs_CA2 {
         }
 
         // Print employees list
-        printAllEmployees();
+        printEmployeesList(employees);
 
         MenuOption selectOption = null;
 
@@ -96,7 +101,7 @@ public class AlgorithmsConstructs_CA2 {
                     case SORT:
                         System.out.println("SORT SELECTED");
                         sortEmployees();
-                        printAllEmployees();
+                        printEmployeesList(employees);
                         break;
                     case SEARCH:
                         System.out.println("SEARCH SELECTED");
@@ -108,7 +113,22 @@ public class AlgorithmsConstructs_CA2 {
                         break;
                     case GENERATE_RANDOM_EMPLOYEE:
                         System.out.println("GENERATE_RANDOM_EMPLOYEE SELECTED");
-                        generateRandomEmployee();
+                        System.out.print("Enter the number of random employees to generate: ");
+                        int numEmployees = 0;
+                        while (numEmployees <= 0 || numEmployees > 5000) {
+                            if (myScan.hasNextInt()) {
+                                numEmployees = myScan.nextInt();
+                                myScan.nextLine(); // Consume newline
+                                if (numEmployees <= 0) {
+                                    System.out.print("Please enter a positive integer: ");
+                                }
+                            } else {
+                                System.out.print("Invalid input. Please enter a positive integer.");
+                                System.out.print("Please enter a positive integer between 1 - 5000");
+                                myScan.next(); // Consume invalid input
+                            }
+                        }
+                        generateRandomEmployees(numEmployees);
                         break;
                     case EXIT:
                         System.out.println("You have exited the program!");
@@ -120,31 +140,100 @@ public class AlgorithmsConstructs_CA2 {
         } while (selectOption != MenuOption.EXIT);
         myScan.close();
     }
- 
-    private static void generateRandomEmployee() {
-        // Generate a random employee
-        String[] names = { "Alice", "Bob", "Charlie", "Diana", "Edward" };
-        Random random = new Random();
-        String name = names[random.nextInt(names.length)];
 
-        // Randomly select EmployeeType or ManagerType
-        int roleType = random.nextInt(2); // 0 for Employee, 1 for Manager
-        Employee newEmployee;
-        if (roleType == 0) {
-            EmployeeType[] employeeTypes = EmployeeType.values();
-            EmployeeType employeeType = employeeTypes[random.nextInt(employeeTypes.length - 1)]; // Exclude BACK
-            Department department = selectRandomDepartment();
-            newEmployee = createEmployee(name, employeeType, department);
-        } else {
-            ManagerType[] managerTypes = ManagerType.values();
-            ManagerType managerType = managerTypes[random.nextInt(managerTypes.length - 1)]; // Exclude BACK
-            Department department = selectRandomDepartment();
-            newEmployee = createManager(name, managerType, department);
+    private static void generateRandomEmployees(int count) {
+        HttpURLConnection connection = null;
+        List<Employee> randomEmployees = new ArrayList<>();
+    
+        try {
+            System.out.println("Sending the request for " + count + " random employees.");
+            System.out.println("Please wait...");
+
+            // Create a URL object with the API endpoint (requesting XML format)
+            String apiUrl = "https://randomuser.me/api/?results=" + count + "&?nat=ie&format=xml";
+            URL url = new URL(apiUrl);
+    
+            // Open a connection
+            connection = (HttpURLConnection) url.openConnection();
+    
+            // Set the request method to GET
+            connection.setRequestMethod("GET");
+    
+            // Get the response code
+            int responseCode = connection.getResponseCode();
+    
+            if (responseCode == HttpURLConnection.HTTP_OK) { // Success
+                // Parse the XML response
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(connection.getInputStream());
+                doc.getDocumentElement().normalize();
+    
+                // Get the NodeList of <results> elements
+                NodeList resultsList = doc.getElementsByTagName("results");
+    
+                if (resultsList.getLength() > 0) {
+                    //resultsList.getLength() - 1 Because las node is Request Info not User Data
+                    for (int i = 0; i < resultsList.getLength() - 1; i++) {
+                        Node resultsNode = resultsList.item(i);
+                        if (resultsNode.getNodeType() == Node.ELEMENT_NODE) {
+                            Element resultsElement = (Element) resultsNode;
+                            Element nameElement = (Element) resultsElement.getElementsByTagName("name").item(0);
+    
+                            if (nameElement != null) {
+                                String firstName = nameElement.getElementsByTagName("first").item(0).getTextContent();
+                                String lastName = nameElement.getElementsByTagName("last").item(0).getTextContent();
+                                String name = firstName + " " + lastName;
+    
+                                // Randomly select EmployeeType or ManagerType
+                                Random random = new Random();
+                                int roleType = random.nextInt(2); // 0 for Employee, 1 for Manager
+                                Employee newEmployee;
+                                Department department = selectRandomDepartment();
+    
+                                if (roleType == 0) {
+                                    EmployeeType[] employeeTypes = EmployeeType.values();
+                                    EmployeeType employeeType;
+                                    do {
+                                        employeeType = employeeTypes[random.nextInt(employeeTypes.length)];
+                                    } while (employeeType == EmployeeType.BACK);
+                                    newEmployee = createEmployee(name, employeeType, department);
+                                } else {
+                                    ManagerType[] managerTypes = ManagerType.values();
+                                    ManagerType managerType;
+                                    do {
+                                        managerType = managerTypes[random.nextInt(managerTypes.length)];
+                                    } while (managerType == ManagerType.BACK);
+                                    newEmployee = createManager(name, managerType, department);
+                                }
+    
+                                employees.add(newEmployee);
+                                randomEmployees.add(newEmployee);
+                            } else {
+                                System.out.println("Name element not found for one of the users.");
+                            }
+                        }
+                    }
+                    System.out.println(randomEmployees.size() + " random employee(s) generated and added to the list.");
+                } else {
+                    System.out.println("No user data received from the API.");
+                }
+            } else {
+                System.out.println("GET request failed. Response Code: " + responseCode);
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred while fetching or parsing user data: " + e.getMessage());
+        } finally {
+            // Close resources
+            try {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            } catch (Exception ex) {
+                System.out.println("An error occurred while closing resources: " + ex.getMessage());
+            }
         }
-
-        employees.add(newEmployee);
-        System.out.println("Random employee generated and added:");
-        printEmployeeDetails(newEmployee);
+        printEmployeesList(randomEmployees);
     }
 
     private static Department selectRandomDepartment() {
@@ -433,7 +522,7 @@ public class AlgorithmsConstructs_CA2 {
                 System.out.println("Please select a valid option.");
                 break;
             }
-            
+
             switch (selectedDept) {
                 case CARDIOLOGY:
                     department = new Cardiology();
@@ -499,7 +588,7 @@ public class AlgorithmsConstructs_CA2 {
         }
     }
 
-    private static void printAllEmployees() {
+    private static void printEmployeesList(List<Employee> employees) {
         // Define the format string for consistent column widths
         String format = "| %-20s | %-25s | %-20s |\n";
 
@@ -559,7 +648,7 @@ public class AlgorithmsConstructs_CA2 {
         displayMenuOptions(ManagerType.values());
     }
 
-    private static void displayDepartmentTypeMenu(){
+    private static void displayDepartmentTypeMenu() {
         displayMenuOptions(DepartmentType.values());
     }
 
@@ -700,24 +789,25 @@ public class AlgorithmsConstructs_CA2 {
     // Enums as per the provided code
     public interface MenuOptionInterface {
         int getValue();
+
         String getStringValue();
     }
-    
+
     enum MenuOption implements MenuOptionInterface {
         SORT(1, "Sorting"),
         SEARCH(2, "Searching"),
         ADD_EMPLOYEE(3, "Add Employee"),
         GENERATE_RANDOM_EMPLOYEE(4, "Generate Random Employee"),
         EXIT(5, "Exit");
-    
+
         private final int value;
         private final String stringValue;
-    
+
         MenuOption(int value, String stringValue) {
             this.value = value;
             this.stringValue = stringValue;
         }
-    
+
         public static MenuOption getValue(int value) {
             for (MenuOption option : values()) {
                 if (option.value == value) {
@@ -726,31 +816,31 @@ public class AlgorithmsConstructs_CA2 {
             }
             return null;
         }
-    
+
         @Override
         public int getValue() {
             return value;
         }
-    
+
         @Override
         public String getStringValue() {
             return stringValue;
         }
-    }    
+    }
 
     enum EmployeeCategory implements MenuOptionInterface {
         MANAGER(1, "Manager"),
         STAFF(2, "Staff"),
         BACK(3, "Back");
-    
+
         private final int value;
         private final String stringValue;
-    
+
         EmployeeCategory(int value, String stringValue) {
             this.value = value;
             this.stringValue = stringValue;
         }
-    
+
         public static EmployeeCategory getValue(int value) {
             for (EmployeeCategory option : values()) {
                 if (option.value == value) {
@@ -759,19 +849,19 @@ public class AlgorithmsConstructs_CA2 {
             }
             return null;
         }
-    
+
         @Override
         public int getValue() {
             return value;
         }
-    
+
         @Override
         public String getStringValue() {
             return stringValue;
         }
     }
 
-    enum ManagerType implements MenuOptionInterface{
+    enum ManagerType implements MenuOptionInterface {
         NURSING_MANAGER(1, "Nursing Manager"),
         CHIEF_MEDICAL_OFFICER(2, "Chief Medical Officer"),
         ADMINISTRATIVE_MANAGER(3, "Administrative Manager"),
@@ -798,14 +888,14 @@ public class AlgorithmsConstructs_CA2 {
         public int getValue() {
             return value;
         }
-    
+
         @Override
         public String getStringValue() {
             return stringValue;
         }
     }
 
-    enum EmployeeType implements MenuOptionInterface{
+    enum EmployeeType implements MenuOptionInterface {
         DOCTOR(1, "Doctor"),
         NURSE(2, "Nurse"),
         ADMINISTRATIVE_STAFF(3, "Administrative Staff"),
@@ -832,14 +922,14 @@ public class AlgorithmsConstructs_CA2 {
         public int getValue() {
             return value;
         }
-    
+
         @Override
         public String getStringValue() {
             return stringValue;
         }
     }
 
-    enum DepartmentType implements MenuOptionInterface{
+    enum DepartmentType implements MenuOptionInterface {
         EMERGENCY(1, "Emergency"),
         PEDIATRICS(2, "Pediatrics"),
         CARDIOLOGY(3, "Cardiology"),
@@ -866,7 +956,7 @@ public class AlgorithmsConstructs_CA2 {
         public int getValue() {
             return value;
         }
-    
+
         @Override
         public String getStringValue() {
             return stringValue;
