@@ -77,7 +77,7 @@ public class AlgorithmsConstructs_CA2 {
         }
 
         // Print employees list
-        printEmployeesList(employees);
+        printEmployeesList(employees, myScan);
 
         MenuOption selectOption = null;
 
@@ -101,7 +101,7 @@ public class AlgorithmsConstructs_CA2 {
                     case SORT:
                         System.out.println("SORT SELECTED");
                         sortEmployees();
-                        printEmployeesList(employees);
+                        printEmployeesList(employees, myScan);
                         break;
                     case SEARCH:
                         System.out.println("SEARCH SELECTED");
@@ -128,8 +128,10 @@ public class AlgorithmsConstructs_CA2 {
                                 myScan.next(); // Consume invalid input
                             }
                         }
-                        generateRandomEmployees(numEmployees);
+                        generateRandomEmployees(numEmployees, myScan);
                         break;
+                    case EDIT_EMPLOYEE_:
+                        editEmployee(myScan);
                     case EXIT:
                         System.out.println("You have exited the program!");
                         break;
@@ -141,7 +143,7 @@ public class AlgorithmsConstructs_CA2 {
         myScan.close();
     }
 
-    private static void generateRandomEmployees(int count) {
+    private static void generateRandomEmployees(int count, Scanner myScan) {
         HttpURLConnection connection = null;
         List<Employee> randomEmployees = new ArrayList<>();
     
@@ -233,7 +235,7 @@ public class AlgorithmsConstructs_CA2 {
                 System.out.println("An error occurred while closing resources: " + ex.getMessage());
             }
         }
-        printEmployeesList(randomEmployees);
+        printEmployeesList(randomEmployees, myScan);
     }
 
     private static Department selectRandomDepartment() {
@@ -502,47 +504,27 @@ public class AlgorithmsConstructs_CA2 {
     }
 
     private static Department selectDepartment(Scanner myScan) {
-        DepartmentType selectedDept;
-        Department department = null;
-
-        do {
-            displayDepartmentTypeMenu();
-
-            while (!myScan.hasNextInt()) {
-                System.out.println("Please select integers only from the options");
-                myScan.next();
+        System.out.println("\nSelect a Department:");
+        displayDepartmentTypeMenu();
+    
+        DepartmentType selectedDept = null;
+        while (selectedDept == null) {
+            if (myScan.hasNextInt()) {
+                int option = myScan.nextInt();
+                myScan.nextLine(); // Consume newline
+                selectedDept = DepartmentType.getValue(option);
+                if (selectedDept == null || selectedDept == DepartmentType.BACK) {
+                    System.out.println("Invalid selection or cancelled. Returning to previous menu.");
+                    return null;
+                }
+            } else {
+                System.out.print("Invalid input. Please enter a number: ");
+                myScan.next(); // Consume invalid input
             }
-
-            int option = myScan.nextInt();
-            myScan.nextLine();
-
-            selectedDept = DepartmentType.getValue(option);
-
-            if (selectedDept == null) {
-                System.out.println("Please select a valid option.");
-                break;
-            }
-
-            switch (selectedDept) {
-                case CARDIOLOGY:
-                    department = new Cardiology();
-                    break;
-                case EMERGENCY:
-                    department = new Emergency();
-                    break;
-                case PEDIATRICS:
-                    department = new Pediatrics();
-                    break;
-                case BACK:
-                    return null; // User chose to go back
-                default:
-                    System.out.println("Please select a valid option.");
-                    break;
-            }
-
-        } while (selectedDept == null);
-
-        return department;
+        }
+    
+        // Map DepartmentType to Department object
+        return new Department(selectedDept.getStringValue());
     }
 
     private static Department createDepartmentFromName(String deptName) {
@@ -588,25 +570,210 @@ public class AlgorithmsConstructs_CA2 {
         }
     }
 
-    private static void printEmployeesList(List<Employee> employees) {
-        // Define the format string for consistent column widths
-        String format = "| %-20s | %-25s | %-20s |\n";
-
-        // Print the header
-        System.out.println("----------------------------------------------------------------------------------------");
-        System.out.printf(format, "Name", "Role", "Department");
-        System.out.println("----------------------------------------------------------------------------------------");
-
-        // Print each employee's details
-        for (Employee employee : employees) {
-            String name = employee.getName();
-            String role = employee.getRole();
-            String departmentName = (employee.getDepartment() != null) ? employee.getDepartment().getDeptName()
-                    : "No Department";
-            System.out.printf(format, name, role, departmentName);
+    private static void editEmployee(Scanner myScan) {
+        if (employees.isEmpty()) {
+            System.out.println("No employees available to edit.");
+            return;
         }
-        // Print the footer
-        System.out.println("----------------------------------------------------------------------------------------");
+    
+        // Display list of employees with indices using MenuOptionInterface
+        System.out.println("\nSelect an employee to edit:");
+    
+        // Create an array of MenuOptionInterface for employees
+        MenuOptionInterface[] employeeOptions = new MenuOptionInterface[employees.size()];
+        for (int i = 0; i < employees.size(); i++) {
+            final int index = i;
+            final Employee emp = employees.get(i);
+            employeeOptions[i] = new MenuOptionInterface() {
+                @Override
+                public int getValue() {
+                    return index + 1; // Start from 1
+                }
+    
+                @Override
+                public String getStringValue() {
+                    return emp.getName() + " - " + emp.getRole();
+                }
+            };
+        }
+    
+        // Display the employee selection menu
+        displayMenuOptions(employeeOptions);
+    
+        // Get user's selection
+        int selectedOption = -1;
+        while (true) {
+            if (myScan.hasNextInt()) {
+                selectedOption = myScan.nextInt();
+                myScan.nextLine(); // Consume newline
+                if (selectedOption >= 1 && selectedOption <= employees.size()) {
+                    break;
+                } else {
+                    System.out.print("Invalid selection. Please enter a number between 1 and " + employees.size() + ": ");
+                }
+            } else {
+                System.out.print("Invalid input. Please enter a number between 1 and " + employees.size() + ": ");
+                myScan.next(); // Consume invalid input
+            }
+        }
+    
+        int index = selectedOption - 1; // Adjust for zero-based index
+        Employee employeeToEdit = employees.get(index);
+    
+        // Display editing options using the enum and generic method
+        boolean doneEditing = false;
+        do {
+            System.out.println("\nEditing Employee: " + employeeToEdit.getName());
+            displayMenuOptions(EditOption.values());
+    
+            int editOptionValue = -1;
+            while (true) {
+                if (myScan.hasNextInt()) {
+                    editOptionValue = myScan.nextInt();
+                    myScan.nextLine(); // Consume newline
+                    break;
+                } else {
+                    System.out.print("Invalid input. Please enter a valid option number: ");
+                    myScan.next(); // Consume invalid input
+                }
+            }
+    
+            EditOption editOption = EditOption.getValue(editOptionValue);
+            if (editOption == null) {
+                System.out.println("Invalid option. Please try again.");
+                continue;
+            }
+    
+            switch (editOption) {
+                case EDIT_NAME:
+                    // Edit Name
+                    System.out.print("Enter new name: ");
+                    String newName = myScan.nextLine().trim();
+                    while (newName.isEmpty()) {
+                        System.out.print("Name cannot be empty. Enter new name: ");
+                        newName = myScan.nextLine().trim();
+                    }
+                    employeeToEdit.setName(newName);
+                    System.out.println("Name updated successfully.");
+                    break;
+                case EDIT_ROLE:
+                    // Edit Role
+                    if (employeeToEdit instanceof Manager) {
+                        editManagerRole((Manager) employeeToEdit, myScan);
+                    } else {
+                        editEmployeeRole(employeeToEdit, myScan);
+                    }
+                    // Update reference in case the employee instance was replaced
+                    employeeToEdit = employees.get(index);
+                    break;
+                case EDIT_DEPARTMENT:
+                    // Edit Department
+                    Department newDept = selectDepartment(myScan);
+                    if (newDept != null) {
+                        employeeToEdit.setDepartment(newDept);
+                        System.out.println("Department updated successfully.");
+                    } else {
+                        System.out.println("Department update cancelled.");
+                    }
+                    break;
+                case FINISH_EDITING:
+                    doneEditing = true;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        } while (!doneEditing);
+    
+        System.out.println("\nUpdated Employee Details:");
+        printEmployeeDetails(employeeToEdit);
+    }
+
+    private static void editEmployeeRole(Employee employee, Scanner myScan) {
+        System.out.println("\nSelect a new role for the employee:");
+        displayMenuOptions(EmployeeType.values());
+    
+        EmployeeType newRole = null;
+        while (newRole == null) {
+            if (myScan.hasNextInt()) {
+                int option = myScan.nextInt();
+                myScan.nextLine(); // Consume newline
+                newRole = EmployeeType.getValue(option);
+                if (newRole == null || newRole == EmployeeType.BACK) {
+                    System.out.print("Invalid selection. Please select a valid role: ");
+                    newRole = null;
+                }
+            } else {
+                System.out.print("Invalid input. Please enter a number: ");
+                myScan.next(); // Consume invalid input
+            }
+        }
+    
+        // Update the employee's role by creating a new instance
+        Employee updatedEmployee = createEmployee(employee.getName(), newRole, employee.getDepartment());
+        employees.set(employees.indexOf(employee), updatedEmployee);
+        System.out.println("Role updated successfully.");
+    }
+
+    private static void editManagerRole(Manager manager, Scanner myScan) {
+        System.out.println("\nSelect a new role for the manager:");
+        displayMenuOptions(ManagerType.values());
+    
+        ManagerType newRole = null;
+        while (newRole == null) {
+            if (myScan.hasNextInt()) {
+                int option = myScan.nextInt();
+                myScan.nextLine(); // Consume newline
+                newRole = ManagerType.getValue(option);
+                if (newRole == null || newRole == ManagerType.BACK) {
+                    System.out.print("Invalid selection. Please select a valid role: ");
+                    newRole = null;
+                }
+            } else {
+                System.out.print("Invalid input. Please enter a number: ");
+                myScan.next(); // Consume invalid input
+            }
+        }
+    
+        // Update the manager's role by creating a new instance
+        Manager updatedManager = createManager(manager.getName(), newRole, manager.getDepartment());
+        employees.set(employees.indexOf(manager), updatedManager);
+        System.out.println("Role updated successfully.");
+    }
+
+    private static void printEmployeesList(List<Employee> employees, Scanner scanner) {
+        int pageSize = 20;
+        int totalEmployees = employees.size();
+        int totalPages = (totalEmployees + pageSize - 1) / pageSize;
+    
+        String format = "| %-20s | %-25s | %-20s |\n";
+    
+        for (int page = 0; page < totalPages; page++) {
+            int start = page * pageSize;
+            int end = Math.min(start + pageSize, totalEmployees);
+    
+            System.out.println("\nPage " + (page + 1) + " of " + totalPages);
+            System.out.println("----------------------------------------------------------------------------------------");
+            System.out.printf(format, "Name", "Role", "Department");
+            System.out.println("----------------------------------------------------------------------------------------");
+    
+            for (int i = start; i < end; i++) {
+                Employee employee = employees.get(i);
+                String name = employee.getName();
+                String role = employee.getRole();
+                String departmentName = (employee.getDepartment() != null) ? employee.getDepartment().getDeptName()
+                        : "No Department";
+                System.out.printf(format, name, role, departmentName);
+            }
+            System.out.println("----------------------------------------------------------------------------------------");
+    
+            if (page < totalPages - 1) {
+                System.out.print("Press Enter to see the next page, or type 'q' to quit: ");
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("q")) {
+                    break;
+                }
+            }
+        }
     }
 
     private static void printEmployeeDetails(Employee newEmployee) {
@@ -705,6 +872,15 @@ public class AlgorithmsConstructs_CA2 {
         public Department getDepartment() {
             return department;
         }
+
+        // Setter methods
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setDepartment(Department department) {
+            this.department = department;
+        }
     }
 
     public static class Doctor extends Employee {
@@ -798,7 +974,8 @@ public class AlgorithmsConstructs_CA2 {
         SEARCH(2, "Searching"),
         ADD_EMPLOYEE(3, "Add Employee"),
         GENERATE_RANDOM_EMPLOYEE(4, "Generate Random Employee"),
-        EXIT(5, "Exit");
+        EDIT_EMPLOYEE_(5, "Edit Existing Employee"),
+        EXIT(6, "Exit");
 
         private final int value;
         private final String stringValue;
@@ -957,6 +1134,40 @@ public class AlgorithmsConstructs_CA2 {
             return value;
         }
 
+        @Override
+        public String getStringValue() {
+            return stringValue;
+        }
+    }
+
+    enum EditOption implements MenuOptionInterface {
+        EDIT_NAME(1, "Edit Name"),
+        EDIT_ROLE(2, "Edit Role"),
+        EDIT_DEPARTMENT(3, "Edit Department"),
+        FINISH_EDITING(4, "Finish Editing");
+    
+        private final int value;
+        private final String stringValue;
+    
+        EditOption(int value, String stringValue) {
+            this.value = value;
+            this.stringValue = stringValue;
+        }
+    
+        public static EditOption getValue(int value) {
+            for (EditOption option : values()) {
+                if (option.value == value) {
+                    return option;
+                }
+            }
+            return null;
+        }
+    
+        @Override
+        public int getValue() {
+            return value;
+        }
+    
         @Override
         public String getStringValue() {
             return stringValue;
