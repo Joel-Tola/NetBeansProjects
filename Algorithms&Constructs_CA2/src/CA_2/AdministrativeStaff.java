@@ -1,4 +1,4 @@
-package CA_2_Joel;
+package CA_2;
 
 public class AdministrativeStaff extends Employee {
     public AdministrativeStaff(String name, Department department) {

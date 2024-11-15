@@ -1,4 +1,4 @@
-package CA_2_Joel;
+package CA_2;
 
 public class ChiefMedicalOfficer extends Manager {
     public ChiefMedicalOfficer(String name, Department department) {

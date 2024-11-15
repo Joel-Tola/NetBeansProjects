@@ -1,4 +1,4 @@
-package CA_2_Joel;
+package CA_2;
 
 public class NursingManager extends Manager {
     public NursingManager(String name, Department department) {

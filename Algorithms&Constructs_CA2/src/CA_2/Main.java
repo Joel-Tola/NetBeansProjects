@@ -1,4 +1,4 @@
-package CA_2_Joel;
+package CA_2;
 
 import java.util.*;
 import java.io.*;
@@ -8,7 +8,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.*;
 
-public class AlgorithmsConstructs_CA2 {
+public class Main {
 
     static List<Employee> employees;
 
@@ -626,15 +626,15 @@ public class AlgorithmsConstructs_CA2 {
             return;
         }
     
-        // Display list of employees with indices using MenuOptionInterface
+        // Display list of employees with indices using IMenuOptionInterface
         System.out.println("\nSelect an employee to edit:");
     
-        // Create an array of MenuOptionInterface for employees
-        MenuOptionInterface[] employeeOptions = new MenuOptionInterface[employees.size()];
+        // Create an array of IMenuOptionInterface for employees
+        IMenuOptionInterface[] employeeOptions = new IMenuOptionInterface[employees.size()];
         for (int i = 0; i < employees.size(); i++) {
             final int index = i;
             final Employee emp = employees.get(i);
-            employeeOptions[i] = new MenuOptionInterface() {
+            employeeOptions[i] = new IMenuOptionInterface() {
                 @Override
                 public int getValue() {
                     return index + 1; // Start from 1
@@ -838,11 +838,11 @@ public class AlgorithmsConstructs_CA2 {
         System.out.println("----------------------------------------------------------------------------------------");
     }
 
-    private static void displayMenuOptions(MenuOptionInterface[] options) {
+    private static void displayMenuOptions(IMenuOptionInterface[] options) {
         String format = "| %-2d: %-35s |\n";
         System.out.println("\nPlease select an option:");
         System.out.println("---------------------------------------------------");
-        for (MenuOptionInterface option : options) {
+        for (IMenuOptionInterface option : options) {
             System.out.printf(format, option.getValue(), option.getStringValue());
         }
         System.out.println("---------------------------------------------------");
@@ -871,393 +871,5 @@ public class AlgorithmsConstructs_CA2 {
 
     private static void displayGenerateEmployeeMenu() {
         displayMenuOptions(GenerateEmployeeOption.values());
-    }
-
-    // Department class
-    public static class Department {
-        private String deptName;
-
-        public Department(String deptName) {
-            this.deptName = deptName;
-        }
-
-        public String getDeptName() {
-            return deptName;
-        }
-    }
-
-    public static class Cardiology extends Department {
-        public Cardiology() {
-            super("Cardiology");
-        }
-    }
-
-    public static class Emergency extends Department {
-        public Emergency() {
-            super("Emergency");
-        }
-    }
-
-    public static class Pediatrics extends Department {
-        public Pediatrics() {
-            super("Pediatrics");
-        }
-    }
-
-    // Employee and Manager classes and their subclasses
-    public static class Employee {
-        protected String name;
-        protected Department department;
-        protected String role;
-
-        public Employee(String name, Department department) {
-            this.name = name;
-            this.department = department;
-        }
-
-        public String getRole() {
-            return "No Role";
-        };
-
-        public String getName() {
-            return name;
-        }
-
-        public Department getDepartment() {
-            return department;
-        }
-
-        // Setter methods
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public void setDepartment(Department department) {
-            this.department = department;
-        }
-    }
-
-    public static class Doctor extends Employee {
-        public Doctor(String name, Department department) {
-            super(name, department);
-        }
-
-        @Override
-        public String getRole() {
-            return "Doctor";
-        }
-    }
-
-    public static class Nurse extends Employee {
-        public Nurse(String name, Department department) {
-            super(name, department);
-        }
-
-        @Override
-        public String getRole() {
-            return "Nurse";
-        }
-    }
-
-    public static class AdministrativeStaff extends Employee {
-        public AdministrativeStaff(String name, Department department) {
-            super(name, department);
-        }
-
-        @Override
-        public String getRole() {
-            return "Administrative Staff";
-        }
-    }
-
-    public static abstract class Manager extends Employee {
-        public Manager(String name, Department department) {
-            super(name, department);
-        }
-
-        public abstract String getManagerType();
-
-        @Override
-        public String getRole() {
-            return getManagerType();
-        }
-    }
-
-    public static class NursingManager extends Manager {
-        public NursingManager(String name, Department department) {
-            super(name, department);
-        }
-
-        @Override
-        public String getManagerType() {
-            return "Nursing Manager";
-        }
-    }
-
-    public static class ChiefMedicalOfficer extends Manager {
-        public ChiefMedicalOfficer(String name, Department department) {
-            super(name, department);
-        }
-
-        @Override
-        public String getManagerType() {
-            return "Chief Medical Officer";
-        }
-    }
-
-    public static class AdministrativeManager extends Manager {
-        public AdministrativeManager(String name, Department department) {
-            super(name, department);
-        }
-
-        @Override
-        public String getManagerType() {
-            return "Administrative Manager";
-        }
-    }
-
-    // Enums as per the provided code
-    public interface MenuOptionInterface {
-        int getValue();
-
-        String getStringValue();
-    }
-
-    enum MenuOption implements MenuOptionInterface {
-        ADD_EMPLOYEE(1, "Add Employee"),
-        GENERATE_RANDOM_EMPLOYEE(2, "Generate Random Employees"),
-        SORT(3, "Sorting"),
-        SEARCH(4, "Searching"),
-        EDIT_EMPLOYEE(5, "Edit Existing Employee"),
-        EXIT(6, "Exit");
-
-        private final int value;
-        private final String stringValue;
-
-        MenuOption(int value, String stringValue) {
-            this.value = value;
-            this.stringValue = stringValue;
-        }
-
-        public static MenuOption getValue(int value) {
-            for (MenuOption option : values()) {
-                if (option.value == value) {
-                    return option;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public int getValue() {
-            return value;
-        }
-
-        @Override
-        public String getStringValue() {
-            return stringValue;
-        }
-    }
-
-    enum EmployeeCategory implements MenuOptionInterface {
-        MANAGER(1, "Manager"),
-        STAFF(2, "Staff"),
-        BACK(3, "Back");
-
-        private final int value;
-        private final String stringValue;
-
-        EmployeeCategory(int value, String stringValue) {
-            this.value = value;
-            this.stringValue = stringValue;
-        }
-
-        public static EmployeeCategory getValue(int value) {
-            for (EmployeeCategory option : values()) {
-                if (option.value == value) {
-                    return option;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public int getValue() {
-            return value;
-        }
-
-        @Override
-        public String getStringValue() {
-            return stringValue;
-        }
-    }
-
-    enum ManagerType implements MenuOptionInterface {
-        NURSING_MANAGER(1, "Nursing Manager"),
-        CHIEF_MEDICAL_OFFICER(2, "Chief Medical Officer"),
-        ADMINISTRATIVE_MANAGER(3, "Administrative Manager"),
-        BACK(4, "Back");
-
-        public final int value;
-        public final String stringValue;
-
-        ManagerType(int value, String stringValue) {
-            this.value = value;
-            this.stringValue = stringValue;
-        }
-
-        public static ManagerType getValue(int value) {
-            for (ManagerType option : values()) {
-                if (option.value == value) {
-                    return option;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public int getValue() {
-            return value;
-        }
-
-        @Override
-        public String getStringValue() {
-            return stringValue;
-        }
-    }
-
-    enum EmployeeType implements MenuOptionInterface {
-        DOCTOR(1, "Doctor"),
-        NURSE(2, "Nurse"),
-        ADMINISTRATIVE_STAFF(3, "Administrative Staff"),
-        BACK(4, "Back");
-
-        public final int value;
-        public final String stringValue;
-
-        EmployeeType(int value, String stringValue) {
-            this.value = value;
-            this.stringValue = stringValue;
-        }
-
-        public static EmployeeType getValue(int value) {
-            for (EmployeeType option : values()) {
-                if (option.value == value) {
-                    return option;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public int getValue() {
-            return value;
-        }
-
-        @Override
-        public String getStringValue() {
-            return stringValue;
-        }
-    }
-
-    enum DepartmentType implements MenuOptionInterface {
-        EMERGENCY(1, "Emergency"),
-        PEDIATRICS(2, "Pediatrics"),
-        CARDIOLOGY(3, "Cardiology"),
-        BACK(4, "Back");
-
-        private final int value;
-        private final String stringValue;
-
-        DepartmentType(int value, String stringValue) {
-            this.value = value;
-            this.stringValue = stringValue;
-        }
-
-        public static DepartmentType getValue(int value) {
-            for (DepartmentType option : values()) {
-                if (option.value == value) {
-                    return option;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public int getValue() {
-            return value;
-        }
-
-        @Override
-        public String getStringValue() {
-            return stringValue;
-        }
-    }
-
-    enum EditOption implements MenuOptionInterface {
-        EDIT_NAME(1, "Edit Name"),
-        EDIT_ROLE(2, "Edit Role"),
-        EDIT_DEPARTMENT(3, "Edit Department"),
-        FINISH_EDITING(4, "Finish Editing");
-    
-        private final int value;
-        private final String stringValue;
-    
-        EditOption(int value, String stringValue) {
-            this.value = value;
-            this.stringValue = stringValue;
-        }
-    
-        public static EditOption getValue(int value) {
-            for (EditOption option : values()) {
-                if (option.value == value) {
-                    return option;
-                }
-            }
-            return null;
-        }
-    
-        @Override
-        public int getValue() {
-            return value;
-        }
-    
-        @Override
-        public String getStringValue() {
-            return stringValue;
-        }
-    }
-
-    enum GenerateEmployeeOption implements MenuOptionInterface {
-        BY_FILE(1, "By Text File"),
-        BY_API(2, "By API"),
-        BACK(3, "Back");
-    
-        private final int value;
-        private final String stringValue;
-    
-        GenerateEmployeeOption(int value, String stringValue) {
-            this.value = value;
-            this.stringValue = stringValue;
-        }
-    
-        public static GenerateEmployeeOption getValue(int value) {
-            for (GenerateEmployeeOption option : values()) {
-                if (option.value == value) {
-                    return option;
-                }
-            }
-            return null;
-        }
-    
-        @Override
-        public int getValue() {
-            return value;
-        }
-    
-        @Override
-        public String getStringValue() {
-            return stringValue;
-        }
     }
 }

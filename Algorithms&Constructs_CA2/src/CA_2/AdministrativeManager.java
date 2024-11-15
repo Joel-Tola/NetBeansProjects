@@ -1,4 +1,4 @@
-package CA_2_Joel;
+package CA_2;
 
 public class AdministrativeManager extends Manager {
     public AdministrativeManager(String name, Department department) {
