@@ -2,6 +2,7 @@
 
 ## Table of Contents
 * **[Introduction](#Introduction)**
+* **[GitHub Repository](#GitHub-Repository)**
 * **[Features](#Features)**
 * **[Technical Details](#Technical-Details)**
 * **[Data Structures](#Data-Structures)**
@@ -21,6 +22,12 @@
 
 ### Introduction
 The System is a Java-based console application, in their first steps, designed to manage employees in a hospital setting. It allows users to add, edit, sort, search, and generate employees either from a file or via an API. The application utilizes object-oriented programming principles, data structures, and algorithms to provide efficient and user-friendly functionality.
+
+### GitHub Repository
+The Repo for the project was created in the following GitHub repository:
+https://github.com/Joel-Tola/NetBeansProjects/tree/master/Algorithms%26Constructs_CA2/src/CA_2
+The repo contains the commits history and the source code for the assignment.
+https://github.com/Joel-Tola/NetBeansProjects/activity
 
 ### Features
 1. *Add Employee*: Add new employees (staff or managers) with specific roles and departments.

@@ -1,5 +1,10 @@
 package CA_2;
 
+/**
+ * Employee is the base class for all the type of employees: Doctor, Nurse,
+ * Administrative Staff, and the distinct types of Manages: ChiefMedicalOfficer,
+ * NursingManager, AdministrativeManager
+ */
 public class Employee {
     protected String name;
     protected Department department;
