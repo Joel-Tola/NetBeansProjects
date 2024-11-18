@@ -6,7 +6,7 @@ package CA_2;
 
 /**
  *
- * @author sljoe
+ * @author Joel Tola Soliz
  */
 public interface IMenuOptionInterface {
     int getValue();
